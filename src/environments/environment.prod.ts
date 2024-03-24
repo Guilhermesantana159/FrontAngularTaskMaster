@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  link: 'http://localhost:50603/'
+  link: 'http://www.taskmasterapi.somee.com/'
 };
