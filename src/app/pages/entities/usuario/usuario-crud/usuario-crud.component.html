@@ -1,0 +1,408 @@
+<div class="position-relative mx-n4 mt-n4">
+    <div class="profile-wid-bg profile-setting-img">
+        <img src="../../../../../assets/images/register-user.jpg" class="profile-wid-img" alt="">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxl-3">
+        <div class="card mt-n5">
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
+                        <img [src]="UserRegisterFormGroup.get('foto')?.value == null ? (UserRegisterFormGroup.get('genero')?.value == 0 ? 'assets/avatar/av-1.svg' : 'assets/avatar/av-7.svg') : UserRegisterFormGroup.get('foto')?.value"
+                            class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                        <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                            <input id="profile-img-file-input" type="file" class="profile-img-file-input" (change)="ChangeFoto($event)" accept="image/png, image/gif, image/jpeg">
+                            <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-camera-fill"></i>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <h5 *ngIf="!IsNew" class="fs-17 mb-1">{{UserRegisterFormGroup.get('nome')?.value}}</h5>
+                    <p class="text-muted mb-0">{{UserRegisterFormGroup.get('perfilAdministrador')?.value ? 'Administrador' : 'Usuário'}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-5">
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-0">Complete seu perfil</h5>
+                    </div>
+                </div>
+                <div class="progress animated-progess custom-progress progress-label">
+                    <div class="progress-bar bg-danger" role="progressbar" [style]="'width:' + porcentagem +'%'" aria-valuenow="30"
+                        aria-valuemin="0" aria-valuemax="100">
+                        <div class="label">{{porcentagem}}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-9">
+        <div class="card mt-xxl-n5">
+            <div class="card-header">
+                <ul ngbNav #customNav="ngbNav" [activeId]="1"
+                    class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                    <mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+
+                    <li [ngbNavItem]="1" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(1)">
+                            <i class="fas fa-home"></i>
+                            Principal
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="UserRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="firstnameInput" id="david" class="form-label">                                
+                                                Nome<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="form-control input-form" type="text" maxlength="100" formControlName="nome" placeholder="Insira seu nome"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('nome')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="lastnameInput" id="david" class="form-label">
+                                                Email<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="form-control input-form" type="email" maxlength="100" formControlName="email" placeholder="Insira seu email"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('email')?.errors?.['email'] && submitRegister"
+                                                text="Campo inválido!">
+                                            </text-error-message>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('email')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label  class="form-label">Nome do pai</label>
+                                            <input type="text" class="form-control" id="phonenumberInput"
+                                                placeholder="Insira o nome do seu pai" maxlength="100" formControlName="nomePai">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="emailInput" class="form-label">
+                                                Nome da mãe<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Insira o nome da sua mãe" maxlength="100" formControlName="nomeMae"/>
+                                            <text-error-message  
+                                            *ngIf="UserRegisterFormGroup.get('nomeMae')?.errors?.['required'] && submitRegister"
+                                            text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="JoiningdatInput" class="form-label">
+                                                CPF<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Insira o seu cpf" [mask]= "'000.000.000-00'" type="text" formControlName="cpf"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('cpf')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('cpf')?.errors?.['minlength'] && submitRegister"
+                                                text="Campo inválido!">
+                                          </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="JoiningdatInput" class="form-label">
+                                                Telefone
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Insira o seu telefone" [mask]= "'(00) 00000-0000'" type="text" formControlName="telefone"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('telefone')?.errors?.['minlength'] && submitRegister"
+                                                text="Campo inválido!">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Data de nascimento<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input matInput class="form-control" [matDatepicker]="from" readonly maxlength="10" formControlName="dataNascimento">
+                                            <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+                                            <mat-datepicker #from>
+                                                <mat-datepicker-actions>
+                                                <button mat-button matDatepickerCancel>Voltar</button>
+                                                <button mat-button matDatepickerCancel (click)="LimparCampoData()">Limpar</button>
+                                                <button mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
+                                                </mat-datepicker-actions>
+                                            </mat-datepicker>
+                                            <text-error-message  
+                                            *ngIf="UserRegisterFormGroup.get('dataNascimento')?.errors?.['required'] && submitRegister"
+                                            text="Campo obrigatório!">
+                                            </text-error-message>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('dataNascimento')?.errors?.['invalidData'] && submitRegister"
+                                                text="Campo inválido!">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Gênero<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <div class="row">
+                                                <mat-radio-group aria-label="Select an option" formControlName="genero">
+                                                    <mat-radio-button checked value=0>Masculino</mat-radio-button>
+                                                    <mat-radio-button value=1>Feminino</mat-radio-button>
+                                                </mat-radio-group>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="countryInput" class="form-label">Habilidades</label>
+                                            <div class="form-control">
+                                                <mat-chip-grid #chipGrid aria-label="Enter keywords">
+                                                  <mat-chip-row *ngFor="let option of lSkill" (removed)="Remove(option)">
+                                                    {{option.descricao}}
+                                                    <button matChipRemove aria-label="'remove ' + keyword">
+                                                      <mat-icon>cancel</mat-icon>
+                                                    </button>
+                                                  </mat-chip-row>
+                                                </mat-chip-grid>
+                                                <input placeholder="Adicione suas habilidades.."
+                                                        [matChipInputFor]="chipGrid"
+                                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                        [matChipInputAddOnBlur]="addOnBlur"
+                                                        (matChipInputTokenEnd)="Add($event)"/>
+                                              </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3 pb-2">
+                                            <label for="exampleFormControlTextarea"
+                                                class="form-label">Sobre Mim</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea"
+                                                placeholder="Algo sobre mim..." maxlength="500" formControlName="observacao"
+                                                rows="3">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" routerLink="/main-dashboard/entities/usuario/" *ngIf="IsAdmin == 'true'">Voltar</button>
+                                            <button type="submit" class="btn btn-primary btn-label" (click)="ButtonEventAba(+1)"><i class="ri-arrow-right-line label-icon align-middle fs-16 me-2"></i>Próximo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(2)">
+                            <i class="far fa-user"></i>
+                            Endereço
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="UserRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="mb-3 col-lg-6">
+                                            <label for="firstnameInput" class="form-label">                                
+                                                Cep 
+                                                <span matTooltip="Insira um cep válido!" matTooltipPosition="right">
+                                                    <i class="ri-information-line"></i>
+                                                </span>
+                                            </label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" [mask]="'000000-00'" placeholder="Insira ceu Cep"
+                                                formControlName="cep" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                                <button class="btn btn-outline-dark" type="button" id="button-addon2" (click)="PesquisarEndereco()" 
+                                                matTooltip="Pesquisar!" matTooltipPosition="right">
+                                                    <i class=" ri-search-line"></i>
+                                                </button>
+                                            </div>                                           
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('cep')?.errors?.['required'] && submitRegister"
+                                                text="Campo obrigatório">
+                                            </text-error-message>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('cep')?.errors?.['minlength'] && submitRegister"
+                                                text="Campo inválido">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                País<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="form-control" formControlName="pais" type="text" [readonly]="disabledForApiCep" [disabled]="disabledForApiCep"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('pais')?.errors?.['required'] && submitRegister"
+                                                text="Campo obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Estado<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" [readonly]="disabledForApiCep" [disabled]="disabledForApiCep" formControlName="estado">
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('estado')?.errors?.['required'] && submitRegister"
+                                                text="Campo obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Cidade<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" [readonly]="disabledForApiCep" [disabled]="disabledForApiCep" formControlName="cidade"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('cidade')?.errors?.['required'] && submitRegister"
+                                                text="Campo obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="emailInput" class="form-label">
+                                                Bairro<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" [disabled]="disabledForApiCep" [readonly]="disabledForApiCep" formControlName="bairro"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('bairro')?.errors?.['required'] && submitRegister"
+                                                text="Campo obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="emailInput" class="form-label">
+                                                Rua<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" [disabled]="disabledForApiCep" [readonly]="disabledForApiCep" formControlName="rua"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('rua')?.errors?.['required'] && submitRegister"
+                                                text="Campo obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="emailInput" class="form-label">
+                                                Número<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" type="number" formControlName="numero" maxlength="10"/>
+                                            <text-error-message  
+                                                *ngIf="UserRegisterFormGroup.get('numero')?.errors?.['required'] && submitRegister"
+                                                text="Campo obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" (click)="ButtonEventAba(-1)">Voltar</button>
+                                            <button type="submit" class="btn btn-primary btn-label" (click)="ButtonEventAba(+1)"><i class="ri-arrow-right-line label-icon align-middle fs-16 me-2"></i>Próximo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="3" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(3)">
+                            <i class="far fa-envelope"></i>
+                            Configurações
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="UserRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="mb-3" *ngIf="IsAdmin == 'true'">
+                                        <h5 class="card-title text-decoration-underline mb-3">Perfil do Usuário:</h5>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="d-flex">
+                                                <div class="flex-grow-1">
+                                                    <label for="directMessage" class="form-check-label fs-14">Tipo de perfil</label>
+                                                    <p class="text-muted">Usuário com perfil administrador</p>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" formControlName="perfilAdministrador"
+                                                            id="directMessage" checked />
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h5 class="card-title text-decoration-underline mb-3">Autenticação do Usuário:</h5>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="d-flex">
+                                                <div class="col-lg-6">
+                                                    <div class="flex-grow-1">
+                                                        <label for="directMessage" class="form-check-label fs-14">Nova Senha</label>
+                                                        <div class="relative">
+                                                            <div class="input-group">
+                                                            <input [type]="ActiveEyePasswordLogin ? 'text' : 'password'" name="senha" maxlength="15" formControlName="senha" class="form-control py-2" placeholder="Insira sua senha" aria-label="Senha" aria-describedby="div-eye">
+                                                            <span  class="input-group-text" (click)="EyePasswordLogin()">
+                                                                <i [class]="ActiveEyePasswordLogin ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+                                                            </span>
+                                                            </div> 
+                                                        </div>
+                                                        <text-error-message  *ngIf="UserRegisterFormGroup.get('senha')?.errors?.['required'] && submitRegister"
+                                                            text="Este campo é obrigatório">
+                                                        </text-error-message>
+                                                        <text-error-message  
+                                                            *ngIf="UserRegisterFormGroup.get('senha')?.errors?.['invalidSenha'] && submitRegister && 
+                                                            !UserRegisterFormGroup.get('senha')?.errors?.['required']"
+                                                            [text]="UserRegisterFormGroup.get('senha')?.errors?.['Motivo']">
+                                                        </text-error-message>                                                         
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="hstack gap-2 justify-content-end">
+                                        <button type="button" class="btn btn-soft-dark" (click)="ButtonEventAba(-1)">Voltar</button>
+                                        <button type="button" class="btn btn-success btn-load" [disabled]="loading" (click)="Salvar(UserRegisterFormGroup)">
+                                            <span class="d-flex align-items-center">
+                                                <span class="spinner-border flex-shrink-0" role="status" [hidden]="!loading">
+                                                    <span class="visually-hidden" ></span>
+                                                </span>
+                                                <span class="flex-grow-1 ms-2" [hidden]="loading">
+                                                    {{IsNew != true ? 'Editar' : 'Salvar'}}
+                                                </span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4">
+                <div class="tab-content">
+                    <div [ngbNavOutlet]="customNav"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

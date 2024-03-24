@@ -1,0 +1,153 @@
+<div class="d-flex justify-content-center h-100 text-danger" *ngIf="loading">
+  <div class="spinner-border " role="status" style="width: 5rem; height: 5rem;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<div *ngIf="!loading" class="table-responsive toggle-history">  
+  <table mat-table matSort (matSortChange)="ConsultarGrid(undefined,$event,undefined)" [dataSource]="data">
+    <!-- Cabeçalho e corpo -->
+    <ng-container *ngFor="let item of gridOptions.Colunas">
+      <ng-container [matColumnDef]="item.Field">
+        <th class="px-2 th-title" [mat-sort-header]="item.Field" mat-header-cell *matHeaderCellDef 
+        [disabled]="!item.OrderBy"> 
+         {{item.DisplayName}}
+        </th>
+        <td class="px-4" mat-cell *matCellDef="let data" [style]="item.StyleColuna == undefined ? styleTd : item.StyleColuna">
+          <div *ngIf="item.ActionButton != undefined">
+            <div [class]="item.ClassCell" [style]="item.StyleCell" *ngFor="let action of item.ActionButton">
+              <button 
+              data-bs-dismiss="modal"
+              [class]="action.ParametrosAction.ClassProperty" 
+              *ngIf="action.TypeButton == 1" 
+              [innerHTML]="action.ParametrosAction.Conteudo | noSanitize" 
+              (click)="ActionButton(action,data)"
+
+              [hidden]="action.ParametrosAction.Hidden.Hidden != undefined
+              ? data[action.ParametrosAction.Hidden.PropertyHidden]
+              : action.ParametrosAction.Hidden.Hidden"
+
+              [disabled]="action.ParametrosAction.Disabled.Disabled == undefined
+                  ? data[action.ParametrosAction.Disabled.PropertyDisabled]
+                  : action.ParametrosAction.Disabled.Disabled"
+
+              [matTooltip]="action.ParametrosAction.Tooltip"
+              matTooltipPosition="above">
+              </button>
+              <a 
+              [hidden]="action.ParametrosAction.Hidden.Hidden != undefined
+              ? data[action.ParametrosAction.Hidden.PropertyHidden]
+              : action.ParametrosAction.Hidden.Hidden"              
+              [class]="action.ParametrosAction.ClassProperty" 
+              [href]="action.ParametrosAction.Href"
+              [target]="action.ParametrosAction.Target"
+              *ngIf="action.TypeButton == 0" 
+              (click)="ActionButton(action,data)">
+              </a>
+            </div>
+          </div> 
+          <div *ngIf="item.ActionButton == undefined">
+            <div *ngIf="item.CellTemplate == undefined"> 
+              <div [class]="item.ClassCell" [style]="item.StyleCell" *ngIf="item.CellGraphics == undefined && item.CellImage == undefined">
+                {{data[item.Field]}}
+              </div>
+              <div *ngIf="item.CellImage != undefined">
+                <img [class]="data[item.CellImage.ClassImage]" [src]="data[item.CellImage.PropertyLink]" 
+                [style]="item.CellImage.StyleImage" [matTooltip]="item.CellImage.Tooltip"
+                matTooltipPosition="above">
+                <div *ngIf="!item.CellImage.OnlyImage" [style]="item.StyleCell" [class]="item.ClassCell">
+                  {{data[item.Field]}}
+                </div>
+              </div>
+              <div *ngIf="item.CellGraphics != undefined">
+                <mat-progress-bar mode="determinate" [value]="data[item.CellGraphics.PropertyLink]" [color]="(data[item.CellGraphics.PropertyLink].length > 2 && data[item.CellGraphics.PropertyLink] != '100') ? warn : primary"
+                [matTooltip]="data[item.CellGraphics.PropertyLink] + item.CellGraphics.Tooltip" [class]="item.CellGraphics.ClassGraphics"
+                matTooltipPosition="above" [style]="item.CellGraphics.StyleGraphics">
+                </mat-progress-bar>
+                <div *ngIf="!item.CellGraphics.OnlyGraphics" [style]="item.StyleCell" [class]="item.ClassCell">
+                  {{data[item.Field]}}
+                </div>
+              </div>
+            </div>
+            <div [class]="item.ClassCell" *ngIf="item.CellTemplate != undefined" [innerHTML]="item.CellTemplate | noSanitize" [style]="item.StyleCell">
+            </div>
+          </div>
+        </td>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngFor="let item of gridOptions.Colunas">
+      <ng-container [matColumnDef]="item.ServerField + 'Field'">
+        <th class="px-2 mw-30 th-filter" mat-header-cell *matHeaderCellDef>
+          <div class="input-group-sm">
+            <form action="javascript:void(0);">
+              <div class="module-filter-date" *ngIf="item.Filter && item.Type == 'data'">
+                <input placeholder="De..." class="form-control group-input-search" matInput [matDatepicker]="to" [mask]= "'00/00/0000'" maxlength="10" 
+                #toInput 
+                (dateChange)="FiltrarGrid({Value:$event.value,Type:item.Type,Field:item.ServerField,EOperadorFilter: 1})">
+                <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+                <mat-datepicker #to>
+                  <mat-datepicker-actions>
+                    <button mat-button matDatepickerCancel>Voltar</button>
+                    <button mat-button matDatepickerCancel (click)="LimparCampoData(to)">Limpar</button>
+                    <button mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
+                  </mat-datepicker-actions>
+                </mat-datepicker>
+                <input placeholder="Até..." class="form-control group-input-search" matInput [matDatepicker]="from" [mask]= "'00/00/0000'" maxlength="10" 
+                  #fromInput 
+                (dateChange)="FiltrarGrid({Value:$event.value,Type:item.Type,Field:item.ServerField,EOperadorFilter: 2})">
+                <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+                <mat-datepicker #from>
+                  <mat-datepicker-actions>
+                    <button mat-button matDatepickerCancel>Voltar</button>
+                    <button mat-button matDatepickerCancel (click)="LimparCampoData(from)">Limpar</button>
+                    <button mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
+                  </mat-datepicker-actions>
+                </mat-datepicker>
+              </div>
+            </form>
+            <div class="group-input-search">
+              <mat-select placeholder="Filtrar.." class="form-control group-input-search" *ngIf="item.Filter && item.Type == 'enum'" (selectionChange)="FiltrarGrid({Value:$event.value,Type:item.Type,Field:item.ServerField,EOperadorFilter: 3})">
+                <mat-option class="group-input-search">Nenhum</mat-option>
+                <mat-option class="group-input-search" *ngFor="let option of item.EnumOptions" [value]="option.Value">{{option.Description}}</mat-option>
+              </mat-select>
+              <div class="form-icon" *ngIf="item.Filter && item.Type == 'string'">
+                <input class="form-control form-control-icon" id="iconInput" placeholder="Filtrar..." type="search" 
+                #box (input)="FiltrarGrid({Value:box.value,Type:item.Type,Field:item.ServerField,EOperadorFilter: 0})">
+                <i class="ri-search-2-line"></i>
+              </div>
+              <div class="form-icon" *ngIf="item.Filter && item.Type == 'number'" >
+                <input class="form-control form-control-icon group-input-search" id="iconInput" placeholder="Filtrar..." type="number" 
+                #box (input)="FiltrarGrid({Value:box.value,Type:item.Type,Field:item.ServerField,EOperadorFilter: 0})">
+                <i class="ri-search-2-line"></i>
+              </div>
+            </div>
+         </div>
+       </th>
+      </ng-container>
+    </ng-container>
+
+    <!-- Primeira linha do header -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="example-first-header-row"></tr>
+
+    <!-- Segunda linha do header -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsFilter"></tr>
+
+    <!-- Body da tabela -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div class="text-muted text-sm-center fw-bold" *ngIf="data.length == 0">
+    Você não possui registros!
+  </div>
+</div>
+<div class="d-flex justify-content-start" *ngIf="!loading">
+  <div class="row">
+    <mat-paginator 
+    [length]="pageEvent.length"
+    [pageIndex]="pageEvent.pageIndex"
+    [pageSize]="pageEvent.pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="ConsultarGrid($event,undefined,undefined)"
+    showFirstLastButtons="true">
+    </mat-paginator>  
+  </div>     
+</div>
+   

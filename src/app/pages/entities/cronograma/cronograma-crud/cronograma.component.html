@@ -1,0 +1,34 @@
+<app-breadcrumbs title="Cronograma do Projeto" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-xl-3">
+                <div class="card card-h-100">
+                    <div class="card-body">
+                        <div id="external-events">
+                            <br>
+                            <p class="text-muted text-uppercase">
+                                Atividades do projeto
+                            </p>
+                            <div class="external-event fc-event" *ngFor="let item of lAtividades" [ngStyle]="{ 'color': item.textColor,'background': item.color}">
+                                <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2">
+                                </i>
+                                {{item.title}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-9">
+                <div class="card card-h-100">
+                    <div class="card-body">
+                        <div id="calendar"></div>
+                        <full-calendar [options]="calendarOptions" #calendar></full-calendar>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style='clear:both'></div>
+    </div>
+</div> 

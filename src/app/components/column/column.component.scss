@@ -1,0 +1,7 @@
+:host {
+    min-height: 10px;
+  }
+  
+.dropdown-toggle.arrow-none::after {
+  display: none !important;
+}

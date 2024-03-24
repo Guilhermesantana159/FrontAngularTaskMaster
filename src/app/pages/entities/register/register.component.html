@@ -1,0 +1,116 @@
+<div class="loginwrapper bg-cover bg-no-repeat bg-center" style="background-image: url(../../../assets/images/bg-image-register.jpg);">
+  <div class="lg-inner-column">
+    <div class="left-columns lg:w-1/2 lg:block hidden">
+      <div class="logo-box-3">
+        <a routerLink="" class="">
+          <img src="../../../assets/svg/logo/logo-white.svg" alt="">
+        </a>
+      </div>
+    </div>
+    <div class="lg:w-1/2 w-full flex flex-col items-center justify-center">
+      <div class="auth-box-3">
+        <div class="mobile-logo text-center mb-6 lg:hidden block">
+          <a routerLink="">
+            <img src="../../../../assets/images/logo-light-png.png" alt=""  height="40" class="dark_logo">
+          </a>
+        </div>
+        <div class="text-center 2xl:mb-10 mb-5">
+          <h4 class="font-medium">Entrar</h4>
+          <div class="text-slate-500 dark:text-slate-400 text-base">
+            Cadastre-se para utilizar a plataforma!
+          </div>
+        </div>
+        <form class="space-y-4" [formGroup]="UserRegisterFormGroup" (ngSubmit)="RegisterUsuario(UserRegisterFormGroup)" autocomplete="off">
+          <div class="fromGroup">
+            <label class="block capitalize form-label">Nome<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span></label>
+            <div class="relative">
+              <input type="text" formControlName="nome" maxlength="150" class="form-control py-2" id="nome" placeholder="Insira seu nome" name="nome">
+              <text-error-message  
+                *ngIf="UserRegisterFormGroup.get('nome')?.errors?.['required'] && submitRegister"
+                text="Este campo é obrigatório">
+              </text-error-message>
+            </div>
+          </div>
+          <div class="fromGroup">
+            <label class="block capitalize form-label">Email<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span></label>
+            <div class="relative">
+              <input type="email" formControlName="email" maxlength="150" class="form-control py-2" id="email" placeholder="Insira seu email" name="email">
+              <text-error-message  
+                *ngIf="UserRegisterFormGroup.get('email')?.errors?.['email'] && submitRegister"
+                text="Campo inválido!">
+              </text-error-message>
+              <text-error-message  
+                *ngIf="UserRegisterFormGroup.get('email')?.errors?.['required'] && submitRegister"
+                text="Este campo é obrigatório">
+              </text-error-message>
+            </div>
+          </div>
+          <div class="fromGroup">
+            <div class="input-label">
+              <label class="block capitalize form-label">Gênero<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span></label>
+            </div>
+            <div class="relative">
+              <mat-radio-group aria-label="Select an option" formControlName="genero">
+                <mat-radio-button class="px-1" checked value=0>Masculino</mat-radio-button>
+                <mat-radio-button class="px-1" value=1>Feminino</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="fromGroup">
+            <label class="block capitalize form-label">CPF<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span></label>
+            <div class="relative">
+              <input type="text" [mask]= "'000.000.000-00'" formControlName="CPF" maxlength="14" class="form-control py-2" id="CPF" placeholder="Insira seu CPF" name="CPF">
+              <text-error-message  
+                *ngIf="UserRegisterFormGroup.get('CPF')?.errors?.['required'] && submitRegister"
+                text="Este campo é obrigatório">
+              </text-error-message>
+              <text-error-message  
+                *ngIf="UserRegisterFormGroup.get('CPF')?.errors?.['minlength'] && submitRegister"
+                text="Campo inválido!">
+              </text-error-message>
+            </div>
+          </div>
+          <div class="fromGroup">
+            <label class="block capitalize form-label">Senha<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span></label>
+            <div class="relative">
+              <div class="input-group">
+                <input [type]="ActiveEyePasswordRegister ? 'text' : 'password'" 
+                class="form-control py-2" 
+                formControlName="senha"
+                placeholder="Insira sua senha" 
+                maxlength="15" id="pwd"  name="pswd"             
+                aria-label="Senha" 
+                aria-describedby="div-eye">
+                <span  class="input-group-text" (click)="EyePasswordRegister()">
+                  <i [class]="ActiveEyePasswordRegister ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+                </span>
+              </div>
+            </div>
+            <text-error-message  
+              *ngIf="UserRegisterFormGroup.get('senha')?.errors?.['required'] && submitRegister"
+              text="Este campo é obrigatório">
+            </text-error-message>
+            <text-error-message  
+            *ngIf="UserRegisterFormGroup.get('senha')?.errors?.['invalidSenha'] && submitRegister && 
+            !UserRegisterFormGroup.get('senha')?.errors?.['required']"
+            [text]="UserRegisterFormGroup.get('senha')?.errors?.['Motivo']">
+            </text-error-message>
+          </div>
+          <button type="submit" class="btn btn-dark block w-full text-center" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span [hidden]="loading">Cadastrar</span>
+          </button>       
+        </form>  
+        <div routerLink="/login" class="mx-auto font-normal text-slate-500 dark:text-slate-400 mt-6 text-sm text-center">
+          Já registrado?
+          <a class="text-slate-900 dark:text-white font-medium pointer">
+            Login
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="auth-footer3 text-white py-5 px-5 text-xl">
+      Dê o primeiro passo para executar seus projetos 
+    </div>
+  </div>
+</div>

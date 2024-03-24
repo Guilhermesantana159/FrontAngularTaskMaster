@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
+.th-title{
+    font-size: 0.850rem;
+    font-weight: bolder;
+    font-family: 'Outfit', sans-serif;
+    border: none;
+}
+
+.th-filter{
+    vertical-align: top;
+    border: 1px;
+    border-bottom: 1px solid rgba(192, 192, 192, 0.63);
+    transform: scale(0.90);
+    transform-origin: 0 0;
+}
+
+table{
+    margin-top: 2%;
+    margin-bottom: 3%;
+    min-width: 100%;
+    table-layout: fixed;
+    font-family: 'Open Sans', sans-serif;
+}
+
+button{
+    box-shadow: 0.3px 0.3px 0.9px rgb(143, 143, 143);
+}
+
+.table-responsive{
+    overflow-x: auto;
+}
+
+td{
+    font-size: 0.750rem;
+    transform-origin: 0 0;
+}
+
+.mat-row:hover{
+    background-color:rgb(238, 238, 238);
+}
+
+
+.group-input-search{
+    font-size: small;
+    font-weight: bold;
+    font-size: small;
+}
+
+.spinner{
+    width: 3rem;
+    height: 3rem;
+}

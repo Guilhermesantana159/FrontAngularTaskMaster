@@ -1,0 +1,362 @@
+<app-breadcrumbs title="Administração de tarefas" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+<div class="row" *ngIf="!data.isView">
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas a fazer</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">
+                            <span *ngIf="!resetIndicadores" [CountTo]="data.indicadores.tarefasFazer" class="counter-value" [from]="0" [duration]="1">{{data.indicadores.tarefasFazer}}</span>
+                        </h2>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-info text-info rounded-circle fs-4">
+                                <i class="ri-ticket-2-line"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas em progresso</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">
+                            <span *ngIf="!resetIndicadores" [CountTo]="data.indicadores.tarefasProgresso" class="counter-value" [from]="0" [duration]="1">{{data.indicadores.tarefasProgresso}}</span>
+                        </h2>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-warning text-warning rounded-circle fs-4">
+                                <i class="mdi mdi-timer-sand"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas completadas</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">
+                            <span *ngIf="!resetIndicadores" [CountTo]="data.indicadores.tarefasCompletas" class="counter-value" [from]="0" [duration]="1">{{data.indicadores.tarefasCompletas}}</span>
+                        </h2>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-success text-success rounded-circle fs-4">
+                                <i class="ri-checkbox-circle-line"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas atrasadas</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">
+                            <span *ngIf="!resetIndicadores" [CountTo]="data.indicadores.tarefasAtrasadas" class="counter-value" [from]="0" [duration]="1">{{data.indicadores.tarefasAtrasadas}}</span>
+                        </h2>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-danger text-danger rounded-circle fs-4">
+                                <i class=" ri-close-circle-fill"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="tasksList">
+            <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title mb-0 flex-grow-1 text-uppercase">TAREFAS</h5>
+                    <div class="flex-shrink-0 d-flex gap-1">
+                        <button class="btn btn-danger add-btn" data-bs-toggle="modal" data-bs-target="#showModal" [disabled]="data.isView"
+                            (click)="openModal(content)">
+                            <i class="ri-add-line align-bottom me-1"></i> 
+                            Criar nova tarefa
+                        </button>
+                        <button class="btn btn-secondary" id="remove-actions" style="display: none"><i class="ri-delete-bin-2-line"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0">
+                <div class="row g-3">
+                    <div class="col-xxl-5 col-sm-12">
+                        <div class="search-box">
+                            <input type="text" name="searchTerm" class="form-control search bg-light border-light"
+                                placeholder="Filtrar atividades ou tarefas.." [(ngModel)]="service.searchTerm">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>                                     
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table-card mb-2">
+                    <table class="table">
+                        <thead>
+                            <tr class="bg-light text-muted">
+                                <th class="sort" sortable="idTarefa" (sort)="onSort($event)">Cód</th>
+                                <th class="sort" sortable="nomeAtividade" (sort)="onSort($event)">Atividade</th>
+                                <th class="sort" sortable="nomeTarefa" (sort)="onSort($event)">Tarefa</th>
+                                <th class="sort" sortable="dataInicio">Data Início</th>
+                                <th class="sort" sortable="dataFim">Data Fim</th>
+                                <th class="sort">Responsável</th>
+                                <th class="sort" sortable="status" (sort)="onSort($event)" *ngIf="!data.isView">Status tarefa</th>
+                                <th class="sort" sortable="prioridade" (sort)="onSort($event)">Prioridade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of dataSource" id="t_{{data.idTarefa}}">
+                                <td><a class="fw-medium link-primary">
+                                        <ngb-highlight [result]="data.idTarefa.toString()" [term]="service.searchTerm">
+                                        </ngb-highlight>
+                                    </a>
+                                </td>
+                                <td class="project_name"><a class="fw-medium link-primary">
+                                        <ngb-highlight [result]="data.nomeAtividade" [term]="service.searchTerm">
+                                        </ngb-highlight>
+                                    </a></td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 tasks_name">{{data.nomeTarefa}}</div>
+                                        <div class="flex-shrink-0 ms-4">
+                                            <ul class="list-inline tasks-list-menu mb-0">
+                                                <li class="list-inline-item"><a [routerLink]="'/main-dashboard/entities/detalhes-tarefas/' + data.idTarefa.toString()"><i
+                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                </li>
+                                                <li class="list-inline-item" (click)="EditarTarefa(data,content)" *ngIf="!isView">
+                                                    <a class="edit-item-btn" href="javascript:void(0);" data-bs-toggle="modal"
+                                                        id="create-btn" data-bs-target="#showModal">
+                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item" (click)="DeletarTarefa(data.idTarefa.toString())" *ngIf="!isView">
+                                                    <a class="remove-item-btn" data-bs-toggle="modal"
+                                                        href="javascript:void(0);" >
+                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a class="fw-medium link-primary">
+                                        <ngb-highlight [result]="data.dataInicio" [term]="service.searchTerm">
+                                        </ngb-highlight>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="fw-medium link-primary">
+                                        <ngb-highlight [result]="data.dataFim" [term]="service.searchTerm">
+                                        </ngb-highlight>
+                                    </a>
+                                </td>
+                                <td class="assignedto">
+                                    <div class="avatar-group">
+                                        <a href="javascript: void(0);" class="avatar-group-item"
+                                            *ngFor="let img of data.lResponsavelTarefa">
+                                            <img [src]="img.foto" alt="" matTooltipPosition="above" [matTooltip]="img.nome"
+                                                class="rounded-circle avatar-xxs" />
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="status" *ngIf="!data.isView">
+                                    <span class="badge text-uppercase"
+                                        [ngClass]=" { 'badge-soft-secondary': data.status === 'Progresso', 'badge-soft-info': data.status === 'Aguardando', 'badge-soft-success': data.status === 'Completo', 'badge-soft-danger': data.status === 'Atrasado' }">
+                                        {{data.status}}
+                                    </span>
+                                </td>
+                                <td class="priority">
+                                    <span class="badge bg-warning text-uppercase" [ngClass]=" { 'bg-danger': data.prioridade === 'Alta', 'bg-success': data.prioridade === 'NãoInformada', 'bg-warning': data.prioridade === 'Media', 'bg-info': data.prioridade === 'Baixa'}">
+                                        {{data.prioridade}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row justify-content-md-between align-items-md-center">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            Mostrando
+                            {{service.startIndex}} de
+                            {{service.endIndex}} em {{service.totalRecords}}
+                            resultados
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="text-md-right float-md-end listjs-pagination">
+                            <ngb-pagination [collectionSize]="(total | async)!" [(page)]="service.page"
+                                [pageSize]="service.pageSize">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #content role="document" let-modal>
+        <div class="modal-header p-3 bg-soft-info">
+            <h5 class="modal-title" id="exampleModalLabel"> {{IsNew != true ? 'Editar' : 'Nova'}} Tarefa</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <form [formGroup]="tarefaFormGroup" class="tablelist-form" autocomplete="off">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                                Nome<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                            </label>
+                            <input class="col-lg-6" class="form-control input-form" type="text" maxlength="100" formControlName="descricao" placeholder="Insira o nome da tarefa.."/>
+                            <text-error-message  
+                                *ngIf="tarefaFormGroup.get('descricao')?.errors?.['required'] && submitted"
+                                text="Este campo é obrigatório">
+                            </text-error-message>
+                            <text-error-message  
+                                *ngIf="!tarefaFormGroup.get('descricao')?.errors?.['required'] && submitted && !validNome"
+                                [text]="messageError">
+                            </text-error-message>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <consulta-padrao 
+                                multiForm="lResponsavel" 
+                                [ParamsConsulta]="paramsConsultaUsuario">
+                            </consulta-padrao>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label for="firstnameInput" class="form-label">                                
+                                Atividade
+                                <span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                            </label>
+                            <mat-select class="form-control" formControlName="atividade">
+                                <mat-option *ngFor="let atv of data.listAtividade" [value]="atv">
+                                    {{atv.nome}}
+                                </mat-option>
+                            </mat-select>
+                            <text-error-message  
+                                *ngIf="tarefaFormGroup.get('atividade')?.errors?.['required'] && submitted"
+                                text="Este campo é obrigatório">
+                            </text-error-message>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label for="firstnameInput" class="form-label">                                
+                                Prioridade
+                            </label>
+                            <mat-select class="form-control" formControlName="prioridade">
+                                <mat-option value="0">
+                                    <span class="badge bg-success text-uppercase" ngClass="bg-success">                                        
+                                        Não informado
+                                    </span>
+                                </mat-option>
+                                <mat-option value="1">
+                                    <span class="badge bg-info text-uppercase" ngClass="bg-info">
+                                        Baixa
+                                    </span>
+                                </mat-option>
+                                <mat-option value="2">
+                                    <span class="badge bg-warning text-uppercase" ngClass="bg-warning">
+                                        Média
+                                    </span>
+                                </mat-option>
+                                <mat-option value="3">
+                                    <span class="badge bg-danger text-uppercase" ngClass="bg-danger">
+                                        Alta
+                                    </span>
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label for="countryInput" class="form-label">Tags</label>
+                            <div class="form-control">
+                                <mat-chip-grid #chipGrid aria-label="Enter keywords">
+                                  <mat-chip-row *ngFor="let option of ltags" (removed)="Remove(option)">
+                                    {{option}}
+                                    <button matChipRemove aria-label="'remove ' + keyword">
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </mat-chip-row>
+                                </mat-chip-grid>
+                                <input placeholder="Adicione suas habilidades.."
+                                        [matChipInputFor]="chipGrid"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        matChipInputAddOnBlur="true"
+                                        (matChipInputTokenEnd)="Add($event)"/>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label  class="form-label">Descrição</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea"
+                                placeholder="Descrição do projeto..." maxlength="500" formControlName="descricaoTarefa"
+                                rows="3">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-soft-dark" (click)="modal.dismiss('Cross click')">Voltar</button>
+                            <button type="button" class="btn btn-success btn-load" [disabled]="loading" (click)="IntegrarTarefa(tarefaFormGroup)" >
+                                <span class="d-flex align-items-center">
+                                    <span class="spinner-border flex-shrink-0" role="status" [hidden]="!loading">
+                                        <span class="visually-hidden" ></span>
+                                    </span>
+                                    <span class="flex-grow-1 ms-2" [hidden]="loading">
+                                        {{IsNew != true ? 'Editar' : 'Salvar'}}
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+ 

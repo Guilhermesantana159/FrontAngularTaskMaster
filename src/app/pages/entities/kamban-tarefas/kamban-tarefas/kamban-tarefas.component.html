@@ -1,0 +1,24 @@
+<app-breadcrumbs title="Registro de Tarefas" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-lg-3 col-auto">
+                <div class="search-box">
+                    <input type="text" class="form-control search" placeholder="Pesquise atividades ou tarefas..." matInput #search_a>
+                    <i class="ri-search-line search-icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="board">
+	<div class="board-wrapper">
+		<div class="board-columns" cdkDropListGroup>
+			<div class="board-column" *ngFor="let column of columnsTotal">
+				<kanban-column [column]="column"></kanban-column>
+			</div>
+		</div>
+	</div>
+</div>

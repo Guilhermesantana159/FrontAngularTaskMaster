@@ -1,0 +1,8 @@
+.span-error{
+  color: white; 
+  font-weight: bold;
+  font-size: x-small;
+  background-color: rgb(224, 66, 66);
+  padding: 3pt;
+  border-radius: 2pt;
+}

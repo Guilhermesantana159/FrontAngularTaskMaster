@@ -1,0 +1,531 @@
+<div class="position-relative mx-n4 mt-n4">
+    <div class="profile-wid-bg profile-setting-img">
+        <img src="../../../../../assets/images/template.jpg" class="profile-wid-img" alt="">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxl-3">
+        <div class="card mt-n5">
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
+                        <img [src]="TemplateRegisterFormGroup.get('foto')?.value == null ? 'assets/images//template.jpg' : TemplateRegisterFormGroup.get('foto')?.value"
+                            class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                        <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                            <input id="profile-img-file-input" [disabled]="disabledAll" type="file" class="profile-img-file-input" (change)="ChangeFoto($event)" accept="image/png, image/gif, image/jpeg">
+                            <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-camera-fill"></i>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <h5 *ngIf="!IsNew" class="fs-17 mb-1">{{TemplateRegisterFormGroup.get('titulo')?.value}}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="!IsNew">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Infomações complementares:</h5>
+                <div class="table-responsive">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <th class="ps-0" scope="row">Cód :</th>
+                                <td class="text-muted">
+                                    {{'#' +TemplateRegisterFormGroup.get('idTemplate')?.value}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="ps-0" scope="row">Data de cadastro :</th>
+                                <td class="text-muted">
+                                    {{TemplateRegisterFormGroup.get('dataCadastro')?.value}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-9">
+        <div class="card mt-xxl-n5">
+            <div class="card-header">
+                <ul ngbNav #customNav="ngbNav" [activeId]="1"
+                    class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                    <mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+                    <li [ngbNavItem]="1" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(1)">
+                            <i class="fas fa-home"></i>
+                            Principal
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="TemplateRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                                                Título<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="col-lg-6" class="form-control input-form" type="text" [readonly]="disabledAll" maxlength="100" formControlName="titulo" placeholder="Insira o título do template.."/>
+                                            <text-error-message  
+                                                *ngIf="TemplateRegisterFormGroup.get('titulo')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label  class="form-label">Descrição</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea" [readonly]="disabledAll"
+                                                placeholder="Descrição do projeto..." maxlength="500" formControlName="descricao"
+                                                rows="3">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <hr class="hr-text" data-content="PERIODO ESTIMADO">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="escalaTempo" class="form-label">                                
+                                                Escala de tempo<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <mat-select class="form-control" formControlName="escalaTempo" [disabled]="disabledAll">
+                                                <mat-option value="0" [disabled]="disabledAll">
+                                                    <span class="text-uppercase">                                        
+                                                        Dias
+                                                    </span>
+                                                </mat-option>
+                                                <mat-option value="1" [disabled]="disabledAll">
+                                                    <span class="text-uppercase">
+                                                        Semanas
+                                                    </span>
+                                                </mat-option>
+                                            </mat-select>
+                                            <text-error-message  
+                                                *ngIf="TemplateRegisterFormGroup.get('escalaTempo')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                                                Quantidade
+                                                <span matTooltip="Ao modificar este campo as tarefas (se cadastradas) que excedem o novo valor estipulado seram readequados e o cronograma (se definido) será readequado a nova estimativa." matTooltipPosition="right">
+                                                    <i class="ri-information-line"></i>
+                                                </span>
+                                                <span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="col-lg-6" class="form-control input-form" type="number" [readonly]="disabledAll" (change)="VerificarValor()" formControlName="quantidade" 
+                                            placeholder="Insira a quantidade de {{TemplateRegisterFormGroup.get('escalaTempo')?.value == '1' ? 'semanas':'dias'}}..."/>
+                                            <text-error-message  
+                                                *ngIf="TemplateRegisterFormGroup.get('quantidade')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <hr class="hr-text" data-content="CATEGORIA">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="categoria" class="form-label">                                
+                                                Categoria<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <mat-select class="form-control" formControlName="categoria" [disabled]="disabledAll">
+                                                <mat-option *ngFor="let item of optionsCategoria" [value]="item.value.toString()">
+                                                    <span class="text-uppercase">
+                                                        {{item.description}}
+                                                    </span>
+                                                </mat-option>
+                                            </mat-select>
+                                            <text-error-message  
+                                                *ngIf="TemplateRegisterFormGroup.get('categoria')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3" *ngIf="TemplateRegisterFormGroup.get('categoria')?.value == 0">
+                                            <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                                                Outra Categoria<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="col-lg-6" class="form-control input-form" type="text" [readonly]="disabledAll" maxlength="15" formControlName="newCategoria" 
+                                            placeholder="Cadastre uma nova categoria..."/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" routerLink="/main-dashboard/entities/template/">Voltar</button>
+                                            <button type="submit" class="btn btn-primary btn-label" (click)="ButtonEventAba(+1)"><i class="ri-arrow-right-line label-icon align-middle fs-16 me-2"></i>Próximo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(2)">
+                            <i class="far fa-user"></i>
+                            Atividades / Tarefas
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="AtividadeRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="firstnameInput" class="form-label">                                
+                                                Atividade<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="form-control input-form" formControlName="atividadeDescricao" [readonly]="disabledAll" type="text" placeholder="Insira sua atividade.."/>                                         
+                                            <text-error-message  
+                                                *ngIf="AtividadeRegisterFormGroup.get('atividadeDescricao')?.errors?.['required'] && submitAtv"
+                                                text="Preencha o campo corretamente">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="escalaTempo" class="form-label">                                
+                                                Tempo previsto ({{TemplateRegisterFormGroup.get('escalaTempo')?.value == '1' ? 'semanas':'dias'}})<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="col-lg-6" class="form-control input-form" type="number" [readonly]="disabledAll" (change)="verficaValorAtividade()" formControlName="escalaTempoAtividade" 
+                                            placeholder="Insira a quantidade de {{TemplateRegisterFormGroup.get('escalaTempoAtividade')?.value == '1' ? 'semanas':'dias'}}..."/>
+                                            <text-error-message  
+                                                *ngIf="AtividadeRegisterFormGroup.get('escalaTempoAtividade')?.errors?.['required'] && submitAtv"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="countryInput" class="form-label">Tarefas</label>
+                                            <div class="form-control">
+                                                <mat-chip-grid #chipGrid aria-label="Enter keywords" [disabled]="disabledAll">
+                                                    <mat-chip-row *ngFor="let option of lTarefa" (removed)="Remove(option)">
+                                                      {{option.descricao}}
+                                                      <button *ngIf="option.idTarefa == undefined" matChipRemove aria-label="'remove ' + keyword">
+                                                        <mat-icon>cancel</mat-icon>
+                                                      </button>
+                                                    </mat-chip-row>
+                                                  </mat-chip-grid>
+                                                <input placeholder="Adicione Tarefas ..."
+                                                    [matChipInputFor]="chipGrid"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="Add($event)"/>
+                                            </div>
+                                            <text-error-message  
+                                                *ngIf="AtividadeRegisterFormGroup.get('lTarefas')?.errors?.['required'] && submitAtv"
+                                                text="Preencha o campo corretamente">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-outline-success btn-sm" [disabled]="disabledAll" (click)="AdicionarGridAtividade(AtividadeRegisterFormGroup)">
+                                                    <i class="ri-add-circle-line py-1"></i>
+                                                    <strong style="margin-left: 2pt;">{{editTarefa ? 'Editar' : 'Adicionar'}}</strong>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <hr class="hr-text" data-content="ATIVIDADES CADASTRADAS">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="header-filter" *ngIf="dataSource.data.length > 0">
+                                            <label class="form-label">
+                                                Filtrar
+                                            </label>                            
+                                            <input class="form-control mb-3" placeholder="Filtrar atividades..." style="width: 100%;" matInput (keyup)="applyFilterAtividades($event)" #input>    
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="row" id="job-list">
+                                                <div *ngIf="dataSource.data.length == 0" class="text-center">
+                                                    <strong>Você não possui atividades cadastradas!</strong>
+                                                </div>
+                                                <div *ngFor="let grid of this.dataSource.data" class="col-lg-3 col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body"> 
+                                                            <button type="button" class="btn btn-icon btn-soft-primary float-end" data-bs-toggle="button" aria-pressed="true">
+                                                                <i class="ri-lightbulb-flash-line fs-16"></i>
+                                                            </button>
+                                                            <a href="javascript:void(0);">
+                                                                <h5>{{grid.atividade}}</h5>
+                                                            </a>
+                                                            <div class="d-flex gap-4 mb-3">
+                                                                <div>
+                                                                    <i class="ri-time-line text-primary me-1 align-bottom"></i> 
+                                                                    {{grid.escalaTempoAtividade}}                                                                
+                                                                    {{TemplateRegisterFormGroup.get('escalaTempo')?.value == '1' ? 'semanas':'dias'}}
+                                                                </div>
+                                                            </div>
+                                                            <strong>Tarefas a serem executadas:</strong>
+                                                            <div class="list-tarefas" *ngFor="let tarefa of grid.listTarefas">
+                                                                <li class="list-tarefa-atividade list-inline-item text-muted">
+                                                                    &bull; 
+                                                                    <span style="cursor: pointer;text-decoration: underline;" (click)="openModalcomplementar(contentComplementar,tarefa,grid.atividade)">{{tarefa.descricao}}</span>  
+                                                                </li>
+                                                            </div>
+                                                            <br>
+                                                            <br>
+                                                            <div class="mt-4 gap-4">
+                                                                <div class="d-flex bd-highlight mt-2"> 
+                                                                    <div class="p-2 bd-highlight"> 
+                                                                        <span class="badge text-uppercase badge-soft-primary">
+                                                                           Template
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="ms-auto p-2 bd-highlight">
+                                                                        <ng-template #content role="document" let-modal>
+                                                                            <div class="modal-header p-3 bg-soft-info">
+                                                                                <h5 class="modal-title" id="exampleModalLabel">Deletar atividade</h5>
+                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+                                                                                    (click)="modal.dismiss('Cross click')"></button>
+                                                                            </div>
+                                                                        </ng-template>
+                                                                        <button *ngIf="grid.idAtividade != undefined" (click)="openModal(content)" data-bs-target="#showModal" type="button" class="btn btn-sm btn-danger mx-1" [disabled]="editTarefa || disabledAll" data-toggle="modal" data-target="#AvisoDeleteAtividade">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </button>
+                                                                        <button *ngIf="grid.idAtividade == undefined" type="button" class="btn btn-sm btn-danger mx-1" [disabled]="editTarefa || disabledAll" (click)="DeletarAtividade(grid)">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </button> 
+                                                                        <button class="btn btn-sm btn-info mx-1" [disabled]="editTarefa || disabledAll" (click)="EditarAtividade(grid)">
+                                                                            <i class="ri-pencil-line"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" (click)="ButtonEventAba(-1)">Voltar</button>
+                                            <button type="submit" class="btn btn-primary btn-label" (click)="ButtonEventAba(+1)"><i class="ri-arrow-right-line label-icon align-middle fs-16 me-2"></i>Próximo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="3" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(3)">
+                            <i class="fas fa-home"></i>
+                            Cronograma
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div cdkDropListGroup>
+                                <div class="row">
+                                    <div class="col-lg-9">
+                                        <div class="text-muted text-center mt-3 mb-3" *ngIf="lCronograma.length == 0">
+                                            Preencha a duração estimada do template..
+                                        </div>
+                                        <div *ngIf="lCronograma.length > 0">
+                                            <div class="text-uppercase">
+                                                <h2>Estimativa da atividade</h2>
+                                            </div>
+                                            <div class="mb-3" *ngFor="let semana of lCronograma; let i = index">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-3">
+                                                        <hr class="hr-text" [attr.data-content]="semana.title">
+                                                    </div>
+                                                </div>
+                                                <div 
+                                                  cdkDropList
+                                                  [id]="i.toString()"
+                                                  [cdkDropListData]="semana.listAtividades"
+                                                  class="example-list mt-3"
+                                                  cdkDropListSortingDisabled
+                                                  (cdkDropListDropped)="drop($event)">
+                                                    <div class="example-box" *ngFor="let item of semana.listAtividades" cdkDrag>
+                                                        <span class="w-75" [id]="item.atividade">
+                                                            <h6 class="d-inline p-1" matTooltip="Atividade">{{item.atividade}}:</h6>
+                                                            <ol class="d-inline p-1" *ngFor="let tarefa of item.listTarefas">
+                                                                <li class="text-muted d-inline p-1">
+                                                                    &bull; 
+                                                                    <span matTooltip="Tarefa" style="cursor: pointer;text-decoration: underline;" (click)="openModalcomplementar(contentComplementar,tarefa,item.atividade)">{{tarefa.descricao}}</span>  
+                                                                </li>
+                                                            </ol>
+                                                        </span>
+                                                        <div>
+                                                            <i class="ri-information-line text-primary me-1 align-bottom pd-1" 
+                                                            matTooltip="Mova para atividades novamente para selecionar nova data!" 
+                                                            matTooltipPosition="right"></i>
+                                                            <i class="ri-time-line text-primary me-1 align-bottom"></i> 
+                                                            {{item.escalaTempoAtividade}}                                                                
+                                                            {{TemplateRegisterFormGroup.get('escalaTempo')?.value == '1' ? 'semanas':'dias'}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 mb-3">
+                                        <div class="text-uppercase">
+                                            <h2>Atividades</h2>
+                                        </div>
+                                        <div
+                                            cdkDropList
+                                            [cdkDropListData]="lAtividadesCronograma"
+                                            id="Atividades"
+                                            class="example-list mt-3"
+                                            (cdkDropListDropped)="drop($event)">
+                                            <div *ngIf="dataSource.data.length == 0" class="text-center text-muted mt-3">
+                                                Nenhuma atividade cadastrada
+                                            </div>
+                                            <div class="example-box" *ngFor="let item of lAtividadesCronograma" cdkDrag>
+                                                <h6>{{item.atividade}}</h6>
+                                                <div>
+                                                    <i class="ri-time-line text-primary me-1 align-bottom"></i> 
+                                                    {{item.escalaTempoAtividade}}                                                                
+                                                    {{TemplateRegisterFormGroup.get('escalaTempo')?.value == '1' ? 'semanas':'dias'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-12">
+                                    <div class="hstack gap-2 justify-content-end">
+                                        <button type="button" class="btn btn-soft-dark" (click)="ButtonEventAba(-1)">Voltar</button>
+                                        <button type="button" class="btn btn-success btn-load" [disabled]="loading" (click)="Salvar(TemplateRegisterFormGroup)">
+                                            <span class="d-flex align-items-center">
+                                                <span class="spinner-border flex-shrink-0" role="status" [hidden]="!loading">
+                                                    <span class="visually-hidden" ></span>
+                                                </span>
+                                                <span class="flex-grow-1 ms-2" [hidden]="loading">
+                                                    {{IsNew != true ? 'Editar' : 'Salvar'}}
+                                                </span>
+                                            </span>
+                                        </button>                                    
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4">
+                <div class="tab-content">
+                    <div [ngbNavOutlet]="customNav"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #contentComplementar role="document" let-modal>
+    <div class="modal-header p-3 bg-soft-info">
+        <h5 class="modal-title" id="exampleModalLabel">Complementar Tarefa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="tarefaFormGroup" class="tablelist-form" autocomplete="off">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                            Nome
+                        </label>
+                        <input class="col-lg-6" class="form-control input-form" type="text" readonly maxlength="100" formControlName="descricao" placeholder="Insira o nome da tarefa.."/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label for="firstnameInput" class="form-label">                                
+                            Prioridade
+                        </label>
+                        <mat-select class="form-control" formControlName="prioridade" [disabled]="disabledAll">
+                            <mat-option value="0" [disabled]="disabledAll">
+                                <span class="badge bg-success text-uppercase" ngClass="bg-success">                                        
+                                    Não informado
+                                </span>
+                            </mat-option>
+                            <mat-option value="1" [disabled]="disabledAll">
+                                <span class="badge bg-info text-uppercase" ngClass="bg-info">
+                                    Baixa
+                                </span>
+                            </mat-option>
+                            <mat-option value="2" [disabled]="disabledAll">
+                                <span class="badge bg-warning text-uppercase" ngClass="bg-warning">
+                                    Média
+                                </span>
+                            </mat-option>
+                            <mat-option value="3" [disabled]="disabledAll">
+                                <span class="badge bg-danger text-uppercase" ngClass="bg-danger">
+                                    Alta
+                                </span>
+                            </mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label for="countryInput" class="form-label">Tags</label>
+                        <div class="form-control">
+                            <mat-chip-grid #chipGrid aria-label="Enter keywords" [disabled]="disabledAll">
+                              <mat-chip-row *ngFor="let option of ltags" (removed)="RemoveTag(option)" [disabled]="disabledAll">
+                                {{option}}
+                                <button matChipRemove aria-label="'remove ' + keyword">
+                                  <mat-icon>cancel</mat-icon>
+                                </button>
+                              </mat-chip-row>
+                            </mat-chip-grid>
+                            <input placeholder="Adicione suas habilidades.."
+                                    [matChipInputFor]="chipGrid"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    matChipInputAddOnBlur="true"
+                                    (matChipInputTokenEnd)="AddTags($event)"/>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label  class="form-label">Descrição</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea" [readonly]="disabledAll"
+                            placeholder="Descrição do projeto..." maxlength="500" formControlName="descricaoTarefa"
+                            rows="3">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-soft-dark" (click)="modal.dismiss('Cross click')">Voltar</button>
+                        <button type="button" class="btn btn-success btn-load" [disabled]="loading" (click)="ComplementarTarefa(tarefaFormGroup)" [disabled]="disabledAll">
+                            <span class="d-flex align-items-center">
+                                <span class="spinner-border flex-shrink-0" role="status" [hidden]="!loading">
+                                    <span class="visually-hidden" ></span>
+                                </span>
+                                <span class="flex-grow-1 ms-2" [hidden]="loading">
+                                    {{IsNew != true ? 'Editar' : 'Salvar'}}
+                                </span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>
+

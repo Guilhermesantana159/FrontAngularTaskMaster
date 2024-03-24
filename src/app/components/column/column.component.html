@@ -1,0 +1,13 @@
+<div class="columns">
+	<div class="d-flex mb-3">
+		<div class="flex-grow-1">
+			<h6 class="fs-14 text-uppercase fw-semibold mb-0">{{column.name}} 
+			<small [class]="'badge align-bottom ms-1' + ' ' + column.color">{{column.tasks.length}}</small></h6>
+		</div>
+	</div>
+</div>
+<div class="tasks-container" cdkDropList [id]="column.name"
+	[cdkDropListData]="column.tasks" 
+	(cdkDropListDropped)="drop($event)">
+	<app-task cdkDrag *ngFor="let task of column.tasks" [taskModel]="task"></app-task>
+</div>

@@ -1,0 +1,122 @@
+<div appScrollspy [spiedTags]="['SECTION']" (sectionChange)="onSectionChange($event)">
+ <div class="layout-wrapper landing">
+    <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar" (window:scroll)="windowScroll()">
+        <div class="container">
+            <a class="navbar-brand" routerLink="/login">
+                <img src="assets/images/logo-light-png.png" class="card-logo card-logo-dark logo-landing" alt="logo dark">
+                <img src="assets/images/logo-dark-png.png" class="card-logo card-logo-light logo-landing" alt="logo light">
+            </a>
+            <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation" (click)="toggleMenu()">
+                <i class="mdi mdi-menu"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
+                    <li class="nav-item">
+                        <a class="nav-link active" [ngClass]="{'active':currentSection === 'hero'}" [ngxScrollTo]="'#hero'" href="javascript:void(0);">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{'active':currentSection === 'services'}" [ngxScrollTo]="'#services'" href="javascript:void(0);">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{'active':currentSection === 'features'}" [ngxScrollTo]="'#features'" href="javascript:void(0);">Páginas</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{'active':currentSection === 'plans'}" [ngxScrollTo]="'#plans'" href="javascript:void(0);">Plans</a>
+                    </li> -->
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{'active':currentSection === 'reviews'}" [ngxScrollTo]="'#reviews'" href="javascript:void(0);">Reviews</a>
+                    </li> -->
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{'active':currentSection === 'team'}" [ngxScrollTo]="'#team'" href="javascript:void(0);">Team</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{'active':currentSection === 'contact'}" [ngxScrollTo]="'#contact'" href="javascript:void(0);">Contatos</a>
+                    </li>
+                </ul>
+
+                <div class="">
+                    <a routerLink="/login" class="btn btn-link fw-medium text-decoration-none text-dark">Entrar</a>
+                    <a routerLink="/login/nova-conta" class="btn btn-primary">Cadastrar-se</a>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+    <section class="section pb-0 hero-section mb-5" id="hero">
+        <div class="bg-overlay bg-overlay-pattern"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-sm-10">
+                    <div class="text-center mt-lg-5 pt-5">
+                        <h1 class="display-6 fw-semibold mb-3 lh-base">A melhor maneira de gerenciar seus <span
+                                class="text-success">Projetos!</span></h1>
+                        <p class="lead text-muted lh-base">TaskMaster é um software de gerenciamento e administração de projetos onde você pode em conjunto ou sozinho tirar seus projetos do papel.</p>
+
+                        <div class="d-flex gap-2 justify-content-center mt-4">
+                            <a routerLink="/login/nova-conta" class="btn btn-primary">Começar<i class="ri-arrow-right-line align-middle ms-1"></i></a>
+                            <a [ngxScrollTo]="'#services'" class="btn btn-danger">Ver sobre<i class="ri-eye-line align-middle ms-1"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 mt-sm-5 pt-sm-5 mb-sm-n5 demo-carousel">
+                        <div class="demo-img-patten-top d-none d-sm-block">
+                            <img src="assets/images/landing/img-pattern.png" class="d-block img-fluid" alt="...">
+                        </div>
+                        <div class="demo-img-patten-bottom d-none d-sm-block">
+                            <img src="assets/images/landing/img-pattern.png" class="d-block img-fluid" alt="...">
+                        </div>
+                        <div class="">
+                            <ngb-carousel [showNavigationArrows]="showNavigationArrows" [showNavigationIndicators]="showNavigationIndicators" class="carousel-inner shadow-lg p-2 bg-white rounded">
+                                <ng-template ngbSlide>
+                                    <img src="assets/images/Home.PNG" class="d-block w-100 h-100" alt="...">
+                                </ng-template>
+                                <ng-template ngbSlide>
+                                    <img src="assets/images/Home_Dark.PNG" class="d-block w-100 h-100" alt="...">
+                                </ng-template>
+                                <ng-template ngbSlide>
+                                    <img src="assets/images/TimeLine.PNG" class="d-block w-100 h-100" alt="...">
+                                </ng-template>
+                                <ng-template ngbSlide>
+                                    <img src="assets/images/CronogramaMes.PNG" class="d-block w-100 h-100" alt="...">
+                                </ng-template>
+                                <ng-template ngbSlide>
+                                    <img src="assets/images/RegistroKanban.PNG" class="d-block w-100 h-100" alt="...">
+                                </ng-template>
+                            </ngb-carousel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="position-absolute start-0 end-0 bottom-0 hero-shape-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 1440 120">
+                <g mask="url(&quot;#SvgjsMask1003&quot;)" fill="none">
+                    <path d="M 0,118 C 288,98.6 1152,40.4 1440,21L1440 140L0 140z">
+                    </path>
+                </g>
+            </svg>
+        </div>
+    </section>
+<!-- <app-client-logo></app-client-logo> -->
+<app-services></app-services>
+<app-collection></app-collection>
+<!-- <app-cta></app-cta> -->
+<!-- <app-designed></app-designed> -->
+<!-- <app-plan></app-plan> -->
+<!-- <app-faqs></app-faqs> -->
+<!-- <app-review></app-review> -->
+<!-- <app-counter></app-counter> -->
+<!-- <app-work-process></app-work-process> -->
+<!-- <app-team></app-team> -->
+<app-contact></app-contact>
+<!-- <app-cta></app-cta> -->
+<app-footer-landing></app-footer-landing>
+<button (click)="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
+    <i class="ri-arrow-up-line"></i>
+</button>
+</div>
+</div>

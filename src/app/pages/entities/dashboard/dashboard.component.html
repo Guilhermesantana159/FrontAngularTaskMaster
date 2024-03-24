@@ -1,0 +1,431 @@
+<div class="d-flex justify-content-center" *ngIf="loading">
+    <div class="spinner-grow text-danger" role="status" style="width: 5rem; height: 5rem;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+</div>
+<div class="row" *ngIf="!loading">
+    <div class="col">
+        <div class="h-100" *ngIf="lProjeto.length > 0">
+            <div class="row mb-3 pb-1">
+                <div class="col-9">
+                    <div class="d-flex align-items-lg-center flex-lg-row flex-column">
+                        <div class="flex-grow-1">
+                            <h4 class="fs-16 mb-1">Bem vindo, {{nomeUsuario}}!</h4>
+                            <p class="text-muted mb-0">Dados referentes a seus projetos e as tarefas designadas a você:</p>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="mt-3 mt-lg-6">
+                        <form [formGroup]="mainFormGroup" class="input-group">
+                            <mat-select class="form-control" formControlName="projeto">
+                                <mat-option *ngFor="let item of lProjeto" [value]="item.value" >
+                                    {{item.description}}
+                                </mat-option>
+                            </mat-select>
+                            <div class="input-group-text bg-info border-info text-white">
+                                <i class="ri-briefcase-2-line"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xxl-3 col-sm-6">
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas a fazer</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                        <span *ngIf="!resetIndicadores" [CountTo]="projeto.lTarefaIndicador.tarefasFazer" class="counter-value" [from]="0" [duration]="1">{{projeto.lTarefaIndicador.tarefasFazer}}</span>
+                                    </h2>
+                                </div>
+                                <div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-soft-info text-info rounded-circle fs-4">
+                                            <i class="ri-ticket-2-line"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-sm-6">
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas em progresso</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                        <span *ngIf="!resetIndicadores" [CountTo]="projeto.lTarefaIndicador.tarefasProgresso" class="counter-value" [from]="0" [duration]="1">{{projeto.lTarefaIndicador.tarefasProgresso}}</span>
+                                    </h2>
+                                </div>
+                                <div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-soft-warning text-warning rounded-circle fs-4">
+                                            <i class="mdi mdi-timer-sand"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-sm-6">
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas completadas</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                        <span *ngIf="!resetIndicadores" [CountTo]="projeto.lTarefaIndicador.tarefasCompletas" class="counter-value" [from]="0" [duration]="1">{{projeto.lTarefaIndicador.tarefasCompletas}}</span>
+                                    </h2>
+                                </div>
+                                <div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-soft-success text-success rounded-circle fs-4">
+                                            <i class="ri-checkbox-circle-line"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-sm-6">
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-semibold text-muted mb-0 text-uppercase">Tarefas atrasadas</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                        <span *ngIf="!resetIndicadores" [CountTo]="projeto.lTarefaIndicador.tarefasAtrasadas" class="counter-value" [from]="0" [duration]="1">{{projeto.lTarefaIndicador.tarefasAtrasadas}}</span>
+                                    </h2>
+                                </div>
+                                <div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-soft-danger text-danger rounded-circle fs-4">
+                                            <i class=" ri-close-circle-fill"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-9">
+                    <div class="card">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Análise do tempo gasto em tarefas</h4>
+                            <div class="d-flex gap-1">
+                                <div class="dropdown card-header-dropdown" ngbDropdown>
+                                    <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        ngbDropdownToggle>
+                                        <span class="text-muted">
+                                            <i class="mdi mdi-chevron-down ms-1"></i>
+                                            Atividade: {{atividade.atividade}}
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                        <a class="dropdown-item" (click)="AtividadeSelect(item)" href="javascript: void(0);" *ngFor="let item of projeto.lAtividade">{{item.atividade}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header p-0 border-0 bg-soft-light">
+                            <div class="row g-0 text-center">
+                                <div class="col-6 col-sm-4">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1">{{(atividadeTarefas?.tempoTotalTarefasEspera ?? 0) > 0 ? atividadeTarefas?.tempoTotalTarefasEspera : 0}} hora(s)</h5>
+                                        <p class="text-muted mb-0">Tempo total em espera</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-4">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1">{{(atividadeTarefas?.tempoTotalTarefasProgresso ?? 0) > 0 ? atividadeTarefas?.tempoTotalTarefasProgresso : 0}} hora(s)</h5>
+                                        <p class="text-muted mb-0">Tempo total em progresso</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-4">
+                                    <div class="p-3 border border-dashed border-start-0 border-end-0">
+                                        <h5 class="mb-1">
+                                            {{(atividadeTarefas?.tempoTotalTarefasEspera ?? 0) + (atividadeTarefas?.tempoTotalTarefasProgresso ?? 0) > 0 ? (atividadeTarefas?.tempoTotalTarefasEspera ?? 0) + (atividadeTarefas?.tempoTotalTarefasProgresso ?? 0) : 0}} hora(s)</h5>
+                                        <p class="text-muted mb-0">Tempo total realizado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0 pb-2">
+                            <div class="w-100 px-4">
+                                <apx-chart dir="ltr" class="apex-charts" [chart]="graficoAtividadeTarefa.chart" #chartTarefa
+                                    [series]="graficoAtividadeTarefa.series" [legend]="graficoAtividadeTarefa.legend"
+                                    [stroke]="graficoAtividadeTarefa.stroke" [colors]="graficoAtividadeTarefa.colors"
+                                    [fill]="graficoAtividadeTarefa.fill" [dataLabels]="graficoAtividadeTarefa.dataLabels"
+                                    [xaxis]="graficoAtividadeTarefa.xaxis" [markers]="graficoAtividadeTarefa.markers"
+                                    [plotOptions]="graficoAtividadeTarefa.plotOptions" [yaxis]="graficoAtividadeTarefa.yaxis"
+                                    [tooltip]="graficoAtividadeTarefa.tooltip" [grid]="graficoAtividadeTarefa.grid"
+                                    [labels]="graficoAtividadeTarefa.labels" dir="ltr">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Relatório de tarefas</h4>
+                            <div class="flex-shrink-0">
+                                <div class="dropdown card-header-dropdown" ngbDropdown>
+                                    <a class="text-reset dropdown-btn arrow-none" href="javascript: void(0);"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        ngbDropdownToggle>
+                                        <span class="text-muted">
+                                            <i class="mdi mdi-chevron-down ms-1"></i>
+                                            Atividade: {{atividade.atividade}}
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                        <a class="dropdown-item" (click)="AtividadeSelect(item)" href="javascript: void(0);" *ngFor="let item of projeto.lAtividade">{{item.atividade}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <apx-chart  class="apex-charts" dir="ltr" #chart
+                                [series]="AtividadeChart.series"
+                                [labels]="AtividadeChart.labels" 
+                                [chart]="AtividadeChart.chart"
+                                [legend]="AtividadeChart.legend" 
+                                [stroke]="AtividadeChart.stroke"
+                                [dataLabels]="AtividadeChart.dataLabels" 
+                                [colors]="AtividadeChart.colors"
+                                dir="ltr">
+                            </apx-chart>
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+        </div> 
+    </div> 
+    <div class="col-auto layout-rightside-col">
+        <div class="overlay" (click)="SidebarHide()"></div>
+        <div class="layout-rightside">
+            <div class="card h-100 rounded-0">
+                <div class="card-body p-0">
+                    <div class="p-3">
+                        <h6 class="text-muted mb-0 text-uppercase fw-semibold fs-13">Tarefas a fazer (Hoje)</h6>
+                    </div>
+                    <ngx-simplebar style="max-height: 310px;" class="p-3 pt-0">
+                        <div class="text-center" *ngIf="lTarefaUsuario.length == 0">    
+                           Você não possui tarefas para realizar..
+                        </div>
+                        <div *ngIf="lTarefaUsuario.length > 0">    
+                            <ol class="ps-3 text-muted" *ngFor="let item of lTarefaUsuario">
+                                <h6><strong>Projeto:</strong> {{item.projeto}}</h6>
+                                <li class="py-1 ml-2" *ngFor="let tarefa of item.lTarefa">
+                                    <a href="javascript: void(0);" class="text-muted">
+                                        <span matTooltip="Tarefa" matTooltipPosition="above">                                        
+                                            {{'- ' + tarefa}}
+                                        </span>
+                                    </a>
+                                </li> 
+                            </ol>
+                            <div class="mt-3 text-center">
+                                <a href="javascript:void(0);" class="text-muted text-decoration-underline" routerLink="/main-dashboard/entities/kamban-tarefas">Ver tudo</a>
+                            </div>
+                        </div>
+                    </ngx-simplebar>
+                    <div class="p-3 mt-2">
+                        <h6 class="text-muted mb-3 text-uppercase fw-semibold fs-13">Avaliação da plataforma</h6>
+                        <div class="bg-light px-3 py-2 rounded-2 mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <div class="fs-16 align-middle text-warning">
+                                        <ngb-rating [max]="5" [(rate)]="rate" [readonly]="true"></ngb-rating>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <h6 class="mb-0">{{feedback?.mediaFeedback}} de 5</h6>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted">Total: <span class="fw-medium">{{feedback?.totalFeedback}}</span> avaliações</div>
+                        </div>
+
+                        <div class="mt-3">
+                            <div class="row align-items-center g-2">
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0">5 </h6>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="p-1">
+                                        <div class="progress animated-progess progress-sm">
+                                            <div class="progress-bar bg-success" role="progressbar"
+                                                [style]="'width:' + ((feedback?.estrela5?? 0) * 100 / (feedback?.estrela5 ?? 1)) + '%'" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0 text-muted">{{feedback?.estrela5}}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center g-2">
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0">4</h6>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="p-1">
+                                        <div class="progress animated-progess progress-sm">
+                                            <div class="progress-bar bg-success" role="progressbar"
+                                            [style]="'width:' + ((feedback?.estrela4  ?? 0) * 100 / (feedback?.totalFeedback ?? 1)) + '%'" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0 text-muted">{{feedback?.estrela4}}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center g-2">
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0">3</h6>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="p-1">
+                                        <div class="progress animated-progess progress-sm">
+                                            <div class="progress-bar bg-warning" role="progressbar"
+                                            [style]="'width:' + ((feedback?.estrela3 ?? 0) * 100 / (feedback?.totalFeedback ?? 1)) + '%'" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0 text-muted">{{feedback?.estrela3}}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center g-2">
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0">2</h6>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="p-1">
+                                        <div class="progress animated-progess progress-sm">
+                                            <div class="progress-bar bg-success" role="progressbar" 
+                                            [style]="'width:' + ((feedback?.estrela2 ?? 0) * 100 / (feedback?.totalFeedback ?? 1)) + '%'" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0 text-muted">{{feedback?.estrela2}}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center g-2">
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0">1</h6>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="p-1">
+                                        <div class="progress animated-progess progress-sm">
+                                            <div class="progress-bar bg-danger" role="progressbar" 
+                                            [style]="'width:' + ((feedback?.estrela1 ?? 0) * 100 / (feedback?.totalFeedback ?? 1)) + '%'" aria-valuemin="0">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="p-1">
+                                        <h6 class="mb-0 text-muted">{{feedback?.estrela1}}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
+                        <div class="card-body">
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-primary btn-label rounded-pill" (click)="openModalFeedback(contentFeedback)">
+                                    <i class="ri-feedback-line label-icon align-middle rounded-pill fs-16 me-2"></i>
+                                    Nos avalie
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div> 
+</div>
+<ng-template #contentFeedback role="document" let-modal>
+    <div class="modal-header p-3 bg-soft-info">
+        <h5 class="modal-title" id="exampleModalLabel">Feedback</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="feedbackFormGroup" class="tablelist-form" autocomplete="off">
+        <div class="modal-body">
+            <div class="mb-1">
+                <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                    Avaliação <span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                </label>
+                <div class="d-flex justify-content-center">
+                    <ngb-rating [max]="5" formControlName="rating" [readonly]="false"></ngb-rating>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label  class="form-label">Comentário</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea"
+                            placeholder="Insira uma crítica, elogio ou uma sugestão de melhora..." maxlength="500" formControlName="comentario"
+                            rows="3">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-soft-dark" [disabled]="loadingRating" (click)="modal.dismiss('Cross click')">Voltar</button>
+                        <button type="button" class="btn btn-success btn-load" [disabled]="feedbackFormGroup.invalid || loadingRating" (click)="SalvarFeedback(feedbackFormGroup)">
+                            <span class="d-flex align-items-center">
+                                <span class="spinner-border flex-shrink-0" role="status" [hidden]="!loadingRating">
+                                    <span class="visually-hidden" ></span>
+                                </span>
+                                <span class="flex-grow-1 ms-2" [hidden]="loadingRating">
+                                    Salvar
+                                </span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

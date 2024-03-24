@@ -1,0 +1,650 @@
+<div class="position-relative mx-n4 mt-n4">
+    <div class="profile-wid-bg profile-setting-img">
+        <img src="../../../../../assets/images/BackgroundProjeto.jpg" class="profile-wid-img" alt="">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxl-3">
+        <div class="card mt-n5">
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
+                        <img [src]="ProjetoRegisterFormGroup.get('foto')?.value == null ? 'assets/images/BackgroundProject.png' : ProjetoRegisterFormGroup.get('foto')?.value"
+                            class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                        <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                            <input id="profile-img-file-input" [disabled]="disabledAll" type="file" class="profile-img-file-input" (change)="ChangeFoto($event)" accept="image/png, image/gif, image/jpeg">
+                            <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-camera-fill"></i>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <h5 *ngIf="!IsNew" class="fs-17 mb-1">{{ProjetoRegisterFormGroup.get('titulo')?.value}}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="!IsNew">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Infomações complementares:</h5>
+                <div class="table-responsive">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <th class="ps-0" scope="row">Cód :</th>
+                                <td class="text-muted">
+                                    {{'#' +ProjetoRegisterFormGroup.get('idProjeto')?.value}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="ps-0" scope="row">Data de cadastro :</th>
+                                <td class="text-muted">
+                                    {{ProjetoRegisterFormGroup.get('dataCadastro')?.value}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-9">
+        <div class="card mt-xxl-n5">
+            <div class="card-header">
+                <ul ngbNav #customNav="ngbNav" [activeId]="1"
+                    class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                    <mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+                    <li [ngbNavItem]="1" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(1)">
+                            <i class="fas fa-home"></i>
+                            Principal
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="ProjetoRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div [class]="IsNew ? 'col-lg-6' : 'col-lg-12'">
+                                        <div class="mb-3">
+                                            <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                                                Título<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="col-lg-6" class="form-control input-form" type="text" [readonly]="disabledAll" maxlength="100" formControlName="titulo" placeholder="Insira o título do projeto.."/>
+                                            <text-error-message  
+                                                *ngIf="ProjetoRegisterFormGroup.get('titulo')?.errors?.['required'] && submitRegister"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" [hidden]="!IsNew">
+                                        <div class="mb-3">
+                                            <consulta-padrao 
+                                                [disabled]="disabledAll"
+                                                selectedText="tituloTemplate"   
+                                                selectedValue="idTemplate"                                                                     
+                                                [ParamsConsulta]="paramsConsultaTemplate">
+                                            </consulta-padrao>
+                                            <text-error-message  
+                                                *ngIf="FuncoesRegisterFormGroup.get('responsavel')?.errors?.['required'] && submitFuncoes"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Data Início<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input matInput class="form-control" [matDatepicker]="from" readonly maxlength="100" formControlName="dataInicio" placeholder="Data início">
+                                            <mat-datepicker-toggle matSuffix [for]="from" [disabled]="disabledAll || !IsNew"></mat-datepicker-toggle>
+                                            <mat-datepicker #from>
+                                                <mat-datepicker-actions>
+                                                <button mat-button matDatepickerCancel>Voltar</button>
+                                                <button mat-button matDatepickerCancel (click)="LimparCampoDataProjetoDataInicio()">Limpar</button>
+                                                <button mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
+                                                </mat-datepicker-actions>
+                                            </mat-datepicker>
+                                            <text-error-message  
+                                                *ngIf="ProjetoRegisterFormGroup.get('dataInicio')?.errors?.['required'] && submitRegister"
+                                                text="Data inicial obrigatório!">
+                                            </text-error-message>
+                                            <text-error-message  
+                                                *ngIf="!(ProjetoRegisterFormGroup.get('dataFim')?.errors?.['required'] || ProjetoRegisterFormGroup.get('dataInicio')?.errors?.['required']) 
+                                                && submitRegister
+                                                && (ProjetoRegisterFormGroup.get('dataFim')?.errors?.['invalidData'] || ProjetoRegisterFormGroup.get('dataInicio')?.errors?.['invalidData'])"
+                                                text="Informe algum periodo com a data inicial maior que a data atual!">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Data Fim<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input matInput class="form-control" [matDatepicker]="to" readonly maxlength="100" formControlName="dataFim" placeholder="Data Fim">
+                                            <mat-datepicker-toggle  matSuffix [for]="to" [disabled]="disabledAll"></mat-datepicker-toggle>
+                                            <mat-datepicker #to>
+                                                <mat-datepicker-actions>
+                                                <button mat-button matDatepickerCancel>Voltar</button>
+                                                <button mat-button matDatepickerCancel (click)="LimparCampoDataProjetoDataFim()">Limpar</button>
+                                                <button mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
+                                                </mat-datepicker-actions>
+                                            </mat-datepicker>
+                                            <text-error-message  
+                                                *ngIf="ProjetoRegisterFormGroup.get('dataFim')?.errors?.['required'] && submitRegister"
+                                                text="Data final obrigatório!">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label  class="form-label">Descrição</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea" [readonly]="disabledAll"
+                                                placeholder="Descrição do projeto..." maxlength="500" formControlName="descricao"
+                                                rows="3">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" routerLink="/main-dashboard/entities/projeto/">Voltar</button>
+                                            <button type="submit" class="btn btn-primary btn-label" (click)="ButtonEventAba(+1)"><i class="ri-arrow-right-line label-icon align-middle fs-16 me-2"></i>Próximo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(2)">
+                            <i class="far fa-user"></i>
+                            Atividades / Tarefas
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="AtividadeRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="firstnameInput" class="form-label">                                
+                                                Atividade<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <input class="form-control input-form" formControlName="atividadeDescricao" [readonly]="disabledAll" type="text" placeholder="Insira sua atividade.."/>                                         
+                                            <text-error-message  
+                                                *ngIf="AtividadeRegisterFormGroup.get('atividadeDescricao')?.errors?.['required'] && submitAtv"
+                                                text="Preencha o campo corretamente">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="firstnameInput" class="form-label">                                
+                                                Periodo Estimado da Atividade<span class="span-required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span>
+                                            </label>
+                                            <mat-date-range-input [formGroup]="AtividadeRegisterFormGroup" [rangePicker]="Atv" class="form-control" [disabled]="disabledAll">
+                                                <input matStartDate formControlName="dataInicioAtv" readonly placeholder="Data de início - Data de fim">
+                                                <input matEndDate formControlName="dataFimAtv" readonly>
+                                            </mat-date-range-input>                            
+                                            <mat-datepicker-toggle matSuffix [for]="Atv"></mat-datepicker-toggle>
+                                            <mat-date-range-picker #Atv>
+                                            <mat-datepicker-actions>
+                                                    <button mat-button matDatepickerCancel>Voltar</button>
+                                                    <button mat-button matDatepickerCancel (click)="LimparCampoDataAtividade()">Limpar</button>
+                                                    <button mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
+                                                </mat-datepicker-actions>
+                                            </mat-date-range-picker>
+                                            <text-error-message  
+                                                *ngIf="AtividadeRegisterFormGroup.get('dataFimAtv')?.errors?.['required'] && submitAtv"
+                                                text="Preencha o campo corretamente">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="countryInput" class="form-label">Tarefas</label>
+                                            <div class="form-control">
+                                                <mat-chip-grid #chipGrid aria-label="Enter keywords" [disabled]="disabledAll">
+                                                    <mat-chip-row *ngFor="let option of lTarefa" (removed)="Remove(option)">
+                                                      {{option.descricao}}
+                                                      <button *ngIf="option.idTarefa == undefined" matChipRemove aria-label="'remove ' + keyword">
+                                                        <mat-icon>cancel</mat-icon>
+                                                      </button>
+                                                    </mat-chip-row>
+                                                  </mat-chip-grid>
+                                                <input placeholder="Adicione Tarefas ..."
+                                                    [matChipInputFor]="chipGrid"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="Add($event)"/>
+                                            </div>
+                                            <text-error-message  
+                                                *ngIf="AtividadeRegisterFormGroup.get('lTarefas')?.errors?.['required'] && submitAtv"
+                                                text="Preencha o campo corretamente">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-outline-success btn-sm" [disabled]="disabledAll" (click)="AdicionarGridAtividade(AtividadeRegisterFormGroup)">
+                                                    <i class="ri-add-circle-line py-1"></i>
+                                                    <strong style="margin-left: 2pt;">{{editTarefa ? 'Editar' : 'Adicionar'}}</strong>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <hr class="hr-text" data-content="ATIVIDADES CADASTRADAS">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="header-filter" *ngIf="dataSource.data.length > 0">
+                                            <label class="form-label">
+                                                Filtrar
+                                            </label>                            
+                                            <input class="form-control mb-3" placeholder="Filtrar atividades..." style="width: 100%;" matInput (keyup)="applyFilterAtividades($event)" #input>    
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="row" id="job-list">
+                                                <div *ngIf="dataSource.data.length == 0" class="text-center">
+                                                    <strong>Você não possui atividades cadastradas!</strong>
+                                                </div>
+                                                <div *ngFor="let grid of atividade | async" class="col-lg-3 col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body"> <button type="button" class="btn btn-icon btn-soft-primary float-end"
+                                                                data-bs-toggle="button" aria-pressed="true"><i class="ri-lightbulb-flash-line fs-16"></i></button>
+                                                            <a href="javascript:void(0);">
+                                                                <h5>{{grid.atividade}}</h5>
+                                                            </a>
+                                                            <div class="d-flex gap-4 mb-3">
+                                                                <div><i class="ri-time-line text-primary me-1 align-bottom"></i> {{grid.dataInicial + ' - ' + grid.dataFim}}</div>
+                                                            </div>
+                                                            <strong>Tarefas a serem executadas:</strong>
+                                                            <div class="list-tarefas" *ngFor="let tarefa of grid.listTarefas">
+                                                                <li class="list-tarefa-atividade list-inline-item text-muted" style="cursor: pointer;text-decoration: underline;" (click)="openModalcomplementar(contentComplementar,tarefa,grid.atividade)">&bull; {{tarefa.descricao}}</li>
+                                                            </div>
+                                                            <br>
+                                                            <br>
+                                                            <div class="mt-4 gap-4">
+                                                                <div class="d-flex bd-highlight mt-2"> 
+                                                                    <div class="p-2 bd-highlight"> 
+                                                                        <span [class]="grid.statusAtividade == undefined ? 'badge text-uppercase badge-soft-info' : (grid.statusAtividade == 0 ? 
+                                                                        'badge text-uppercase badge-soft-secondary' : (grid.statusAtividade ==  1 ? 'badge text-uppercase badge-soft-success'
+                                                                        : (grid.statusAtividade == 2 ? 'badge text-uppercase badge-soft-danger' : 'badge text-uppercase badge-soft-warning')))">
+                                                                            {{
+                                                                                grid.statusAtividade == undefined ? 'Novo' : (grid.statusAtividade == 0 ? 
+                                                                                'Em Progresso' : (grid.statusAtividade ==  1 ? 'Completo': (grid.statusAtividade == 2 ? 'Atrasado' : 'Inativo')))
+                                                                            }}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="ms-auto p-2 bd-highlight">
+                                                                        <ng-template #content role="document" let-modal>
+                                                                            <div class="modal-header p-3 bg-soft-info">
+                                                                                <h5 class="modal-title" id="exampleModalLabel">Deletar atividade</h5>
+                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+                                                                                    (click)="modal.dismiss('Cross click')"></button>
+                                                                            </div>
+                                                                            <form [formGroup]="FuncoesRegisterFormGroup" class="tablelist-form" autocomplete="off">
+                                                                                <div class="modal-body">
+                                                                                    <div class="row">
+                                                                                        <div class="col-lg-12">
+                                                                                            <div class="mb-3">
+                                                                                                <p>
+                                                                                                    Este processo é irreversível, ele irá 
+                                                                                                    deletar todos os registros de tarefas atrelado a essa atividade.
+                                                                                                    Deseja realmente prosseguir?
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>   
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-sm btn-light mx-1" (click)="modal.dismiss('Cross click')">
+                                                                                        Voltar
+                                                                                    </button> 
+                                                                                    <button type="button" class="btn btn-sm btn-danger mx-1" (click)="DeletarAtividadeExistente(grid)" (click)="modal.dismiss('Cross click')">
+                                                                                        Deletar
+                                                                                    </button>
+                                                                                </div>                                                                             
+                                                                            </form>
+                                                                        </ng-template>
+                                                                        <button *ngIf="grid.idAtividade != undefined" (click)="openModal(content)"  data-bs-target="#showModal" type="button" class="btn btn-sm btn-danger mx-1" [disabled]="editTarefa || disabledAll" data-toggle="modal" data-target="#AvisoDeleteAtividade">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </button>
+                                                                        <button *ngIf="grid.idAtividade == undefined" type="button" class="btn btn-sm btn-danger mx-1" [disabled]="editTarefa || disabledAll" (click)="DeletarAtividade(grid)">
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </button> 
+                                                                        <button class="btn btn-sm btn-info mx-1" [disabled]="editTarefa || disabledAll" (click)="EditarAtividade(grid)">
+                                                                            <i class="ri-pencil-line"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" (click)="ButtonEventAba(-1)">Voltar</button>
+                                            <button type="submit" class="btn btn-primary btn-label" (click)="ButtonEventAba(+1)"><i class="ri-arrow-right-line label-icon align-middle fs-16 me-2"></i>Próximo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="3" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(3)">
+                            <i class="far fa-user"></i>
+                            Equipe / Funções
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="FuncoesRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <consulta-padrao 
+                                                [disabled]="editTarefaEquipe || disabledAll"
+                                                selectedText="responsavel"   
+                                                selectedValue="idResponsavel"                                                                     
+                                                [ParamsConsulta]="paramsConsultaUsuario">
+                                            </consulta-padrao>
+                                            <text-error-message  
+                                                *ngIf="FuncoesRegisterFormGroup.get('responsavel')?.errors?.['required'] && submitFuncoes"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="firstnameInput" class="form-label">                                
+                                                Tarefa
+                                                <span class="span-required" matTooltip="Campo obrigatório e preenchido a partir da aba atividades!" matTooltipPosition="right">
+                                                    <i class="ri-information-line"></i>
+                                                </span>
+                                            </label>
+                                            <mat-select class="form-control" formControlName="listTarefas" multiple [compareWith]="compareTarefaObjects">
+                                                <mat-optgroup *ngFor="let group of dataSource.data" [label]="group.atividade">
+                                                  <mat-option [disabled]="disabledAll" *ngFor="let tarefa of group.listTarefas" [value]="{tarefa: tarefa.descricao,atividade: group.atividade}">
+                                                    {{tarefa.descricao}}
+                                                  </mat-option>
+                                                </mat-optgroup>                                        
+                                            </mat-select>
+                                            <text-error-message  
+                                                *ngIf="FuncoesRegisterFormGroup.get('listTarefas')?.errors?.['required'] && submitFuncoes"
+                                                text="Este campo é obrigatório">
+                                            </text-error-message>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-outline-success btn-sm" [disabled]="disabledAll" (click)="AdicionarTarefaEquipe(FuncoesRegisterFormGroup)">
+                                                    <i class="ri-add-circle-line py-1"></i>
+                                                    <strong style="margin-left: 2pt;">{{editTarefaEquipe ? 'Editar' : 'Adicionar'}}</strong>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <hr class="hr-text" data-content="DIVISÃO DE TAREFAS">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="header-filter" *ngIf="dataSourcelTarefaFuncoes.data.length > 0">
+                                            <label class="form-label">
+                                                Filtrar
+                                            </label>                            
+                                            <input class="form-control mb-3" placeholder="Filtrar tarefas..." style="width: 100%;" matInput (keyup)="applyFilterTarefaEquipe($event)" #input>    
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="row" id="job-list">
+                                                <div *ngIf="dataSourcelTarefaFuncoes.data.length == 0" class="text-center">
+                                                    <strong>Você não atribuiu uma tarefa a um membro da equipe!</strong>
+                                                </div>
+                                                <div *ngFor="let grid of tarefas | async" class="col-lg-3 col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body"> <button type="button" class="btn btn-icon btn-soft-primary float-end"
+                                                                data-bs-toggle="button" aria-pressed="true"><i class="ri-lightbulb-flash-line fs-16"></i></button>
+                                                            <a href="javascript:void(0);">
+                                                                <h5>{{grid.responsavel}}</h5>
+                                                            </a>
+                                                            <strong>Tarefas a serem executadas:</strong>
+                                                            <div class="list-tarefas" *ngFor="let tarefa of grid.listTarefas">
+                                                                <li class="list-tarefa-atividade list-inline-item text-muted">&bull; {{tarefa.tarefa}}</li>
+                                                            </div>
+                                                            <br>
+                                                            <div class="mt-4 gap-4">
+                                                                <div class="d-flex justify-content-end"> 
+                                                                    <button class="btn btn-sm btn-danger mx-1" [disabled]="editTarefaEquipe || disabledAll" (click)="DeletarTarefaEquipe(grid)">
+                                                                        <i class="ri-delete-bin-line"></i>
+                                                                    </button> 
+                                                                    <button class="btn btn-sm btn-info mx-1" [disabled]="editTarefaEquipe || disabledAll" (click)="EditarTarefaEquipe(grid)">
+                                                                        <i class="ri-pencil-line"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>                                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" (click)="ButtonEventAba(-1)">Voltar</button>
+                                            <button type="submit" class="btn btn-primary btn-label" (click)="ButtonEventAba(+1)"><i class="ri-arrow-right-line label-icon align-middle fs-16 me-2"></i>Próximo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="4" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab" (click)="ControleAbas(4)">
+                            <i class="far fa-envelope"></i>
+                            Configurações
+                        </a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="ProjetoRegisterFormGroup" action="javascript:void(0);">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <h4 class="card-title text-decoration-underline mb-3">Notificações:</h4>
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted">Notificar via meu email se o projeto atrasou</p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" formControlName="emailProjetoAtrasado" [readonly]="disabledAll" />
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted">Notificar via portal se o projeto atrasou</p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" formControlName="portalProjetoAtrasado" [readonly]="disabledAll" />
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted">Notificar via email tarefas atrasadas</p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" formControlName="emailTarefaAtrasada" [readonly]="disabledAll" />
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted">Notificar via portal tarefas atrasadas</p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" formControlName="portalTarefaAtrasada" [readonly]="disabledAll" />
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted">Notificar aos participantes alteração de status do projeto</p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" formControlName="alteracaoStatusProjetoNotificar" [readonly]="disabledAll" />
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="d-flex">
+                                                    <div class="flex-grow-1">
+                                                        <p class="text-muted">Notificar novas tarefas ou a retirada de tarefas aos envolvidos</p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" formControlName="alteracaoTarefasProjetoNotificar" [readonly]="disabledAll" />
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-soft-dark" (click)="ButtonEventAba(-1)">Voltar</button>
+                                            <button type="button" class="btn btn-success btn-load" [hidden]="disabledAll" [disabled]="loading" (click)="Salvar(ProjetoRegisterFormGroup)">
+                                                <span class="d-flex align-items-center">
+                                                    <span class="spinner-border flex-shrink-0" role="status" [hidden]="!loading">
+                                                        <span class="visually-hidden" ></span>
+                                                    </span>
+                                                    <span class="flex-grow-1 ms-2" [hidden]="loading">
+                                                        {{IsNew != true ? 'Editar' : 'Salvar'}}
+                                                    </span>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form> 
+                        </ng-template>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4">
+                <div class="tab-content">
+                    <div [ngbNavOutlet]="customNav"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #contentComplementar role="document" let-modal>
+    <div class="modal-header p-3 bg-soft-info">
+        <h5 class="modal-title" id="exampleModalLabel">Complementar Tarefa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+            (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="tarefaFormGroup" class="tablelist-form" autocomplete="off">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label class="col-lg-6" for="firstnameInput" class="form-label">                                
+                            Nome
+                        </label>
+                        <input class="col-lg-6" class="form-control input-form" type="text" readonly maxlength="100" formControlName="descricao" placeholder="Insira o nome da tarefa.."/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label for="firstnameInput" class="form-label">                                
+                            Prioridade
+                        </label>
+                        <mat-select class="form-control" formControlName="prioridade" [disabled]="disabledAll">
+                            <mat-option value="0" [disabled]="disabledAll">
+                                <span class="badge bg-success text-uppercase" ngClass="bg-success">                                        
+                                    Não informado
+                                </span>
+                            </mat-option>
+                            <mat-option value="1" [disabled]="disabledAll">
+                                <span class="badge bg-info text-uppercase" ngClass="bg-info">
+                                    Baixa
+                                </span>
+                            </mat-option>
+                            <mat-option value="2" [disabled]="disabledAll">
+                                <span class="badge bg-warning text-uppercase" ngClass="bg-warning">
+                                    Média
+                                </span>
+                            </mat-option>
+                            <mat-option value="3" [disabled]="disabledAll">
+                                <span class="badge bg-danger text-uppercase" ngClass="bg-danger">
+                                    Alta
+                                </span>
+                            </mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label for="countryInput" class="form-label">Tags</label>
+                        <div class="form-control">
+                            <mat-chip-grid #chipGrid aria-label="Enter keywords" [disabled]="disabledAll">
+                              <mat-chip-row *ngFor="let option of ltags" (removed)="RemoveTag(option)" [disabled]="disabledAll">
+                                {{option}}
+                                <button matChipRemove aria-label="'remove ' + keyword">
+                                  <mat-icon>cancel</mat-icon>
+                                </button>
+                              </mat-chip-row>
+                            </mat-chip-grid>
+                            <input placeholder="Adicione suas habilidades.."
+                                    [matChipInputFor]="chipGrid"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    matChipInputAddOnBlur="true"
+                                    (matChipInputTokenEnd)="AddTags($event)"/>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="mb-3">
+                        <label  class="form-label">Descrição</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea" [readonly]="disabledAll"
+                            placeholder="Descrição do projeto..." maxlength="500" formControlName="descricaoTarefa"
+                            rows="3">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-soft-dark" (click)="modal.dismiss('Cross click')">Voltar</button>
+                        <button type="button" class="btn btn-success btn-load" [disabled]="loading" (click)="ComplementarTarefa(tarefaFormGroup)" [disabled]="disabledAll">
+                            <span class="d-flex align-items-center">
+                                <span class="spinner-border flex-shrink-0" role="status" [hidden]="!loading">
+                                    <span class="visually-hidden" ></span>
+                                </span>
+                                <span class="flex-grow-1 ms-2" [hidden]="loading">
+                                    {{IsNew != true ? 'Editar' : 'Salvar'}}
+                                </span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

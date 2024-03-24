@@ -1,0 +1,63 @@
+<div class="card tasks-box">
+    <div class="card-body" [style]="taskModel.permiteInicio == true ? 'cursor: move;' : 'cursor: not-allowed;background: rgba(165, 165, 165, 0.336) !important;'">
+        <div class="d-flex mb-2">
+            <a href="javascript:void(0)" class="text-muted fw-medium fs-14 flex-grow-1 text-uppercase">
+                #{{taskModel.idTarefa + ' - ' + taskModel.nomeTarefa}}
+            </a>
+            <div class="dropdown" ngbDropdown>
+                <a href="javascript:void(0);" class="text-muted arrow-none" id="dropdownMenuLink1"
+                data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                    <i class="ri-more-fill"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink1" ngbDropdownMenu>
+                    <li>
+                        <a class="dropdown-item" [routerLink]="'/main-dashboard/entities/detalhes-tarefas/' + taskModel.idTarefa.toString()">
+                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Ver detalhes
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <h6 class="fs-16 text-truncate task-title">
+            {{taskModel.descricaoTarefa == undefined ? ''  : taskModel.descricaoTarefa}}
+        </h6>
+        <br/>
+        <p class="text-muted">
+            <strong class="text-uppercase">Atividade:</strong>
+          {{taskModel.nomeAtividade}}
+        </p>
+        <p class="text-muted">
+            <strong class="text-uppercase">Prioridade:</strong>
+            <span class="badge bg-warning text-uppercase" [ngClass]=" { 'bg-danger': taskModel.prioridade === 'Alta', 'bg-success': taskModel.prioridade === 'NãoInformada', 'bg-warning': taskModel.prioridade === 'Media', 'bg-info': taskModel.prioridade === 'Baixa'}">
+                {{taskModel.prioridade}}
+            </span>        
+        </p>
+        <div class="d-flex align-items-center">
+            <div class="hstack flex-wrap gap-2 fs-15" *ngFor="let loop of taskModel.lTags">
+                <span class="badge badge-soft-primary">
+                    {{loop}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer border-top-dashed" [style]="taskModel.permiteInicio == true ? 'cursor: move;' : 'cursor: not-allowed;background: rgba(165, 165, 165, 0.336) !important;'">
+        <div class="d-flex">
+            <div class="flex-grow-1">
+                <span class="text-muted">
+                <i class="ri-time-line align-bottom"></i>
+                {{taskModel.dataInicio + ' - ' + taskModel.dataFim}}
+                </span>
+            </div>
+            <div class="flex-shrink-0">
+                <div class="avatar-group">
+                    <a href="javascript: void(0);" class="avatar-group-item"
+                        *ngFor="let img of taskModel.lResponsavelTarefa">
+                        <img [src]="img.foto" alt="" matTooltipPosition="above" [matTooltip]="img.nome"
+                            class="rounded-circle avatar-xxs" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ngb-progressbar [value]="taskModel.porcentagem" [type]="taskModel.statusEnum == 2 ? 'success' : ( taskModel.porcentagem < 70 ? 'info' : (taskModel.porcentagem > 100 ? 'danger' : 'warning'))" class="progress-sm" [matTooltip]="taskModel.porcentagem +'%'"></ngb-progressbar>
+</div>

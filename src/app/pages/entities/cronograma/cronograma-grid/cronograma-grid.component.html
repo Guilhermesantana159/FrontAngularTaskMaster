@@ -1,0 +1,21 @@
+<app-breadcrumbs title="Consulta Cronograma" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="card"> 
+  <div class="card-body">
+    <div class="row">
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-dark btn-border m-1" (click)="RecarregarGrid()">
+          <small>
+            <strong>
+            <i class="ri-refresh-line"></i> Atualizar
+            </strong>
+          </small>
+        </button>
+      </div>
+  </div>
+    <div class="row px-2">
+      <data-grid [gridOptions]="gridOptions" [modal]="false" (Editar)="Editar($event)">
+      </data-grid>  
+    </div>
+  </div> 
+</div> 
+

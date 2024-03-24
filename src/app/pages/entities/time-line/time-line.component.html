@@ -1,0 +1,81 @@
+<app-breadcrumbs title="Time line atividade"></app-breadcrumbs>
+<mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+<div class="timeline">
+  <div *ngFor='let entry of timeLine;let i = index'>
+    <div class="line" [ngClass]="{ left: i%2!==0, right:i%2==0}">
+      <div class="content">
+          <div *ngIf="i == 0 && entry.projeto">
+            <h3>{{entry.data}}</h3>
+            <p>
+              {{'Início do projeto!'}}
+            </p> 
+            <div class="d-flex justify-content-end">
+              <div class="avatar-group">
+                <img [src]="entry.foto" alt="" matTooltipPosition="above" [matTooltip]="entry.usuario ?? ''"
+                    class="rounded-circle avatar-xxs" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="i == 1 && entry.atvidade">
+            <h3>{{entry.data}}</h3>
+            <p>
+              {{'Início da atividade!'}}
+            </p> 
+            <br>
+            <div class="d-flex justify-content-end">
+              <div class="avatar-group">
+                <img [src]="entry.foto" alt="" matTooltipPosition="above" [matTooltip]="entry.usuario ?? ''"
+                    class="rounded-circle avatar-xxs" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="entry.point">
+            <h3>{{entry.data}}</h3>
+            <p>
+              O integrante do projeto <strong>{{entry.usuario}}</strong> moveu a tarefa {{entry.tarefaNome}} de
+              <span class="badge text-uppercase"
+                [ngClass]=" { 'badge-soft-secondary': entry.statusDe === 'Progresso', 'badge-soft-info': entry.statusDe === 'Aguardando', 'badge-soft-success': entry.statusDe === 'Completo', 'badge-soft-danger': entry.statusDe === 'Atrasado' }">
+                {{entry.statusDe}}
+              </span> para 
+              <span class="badge text-uppercase"
+                [ngClass]=" { 'badge-soft-secondary': entry.statusAte === 'Progresso', 'badge-soft-info': entry.statusAte === 'Aguardando', 'badge-soft-success': entry.statusAte === 'Completo', 'badge-soft-danger': entry.statusAte === 'Atrasado' }">
+                {{entry.statusAte}}.
+              </span>
+            </p> 
+            <br>
+            <div class="d-flex justify-content-end">
+              <div class="avatar-group">
+                <img [src]="entry.foto" alt="" matTooltipPosition="above" [matTooltip]="entry.usuario ?? ''"
+                    class="rounded-circle avatar-xxs" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="i > 1 && entry.atvidade">
+            <h3>{{entry.data}}</h3>
+            <p>
+              {{'Previsão de término da atividade!'}}
+            </p> 
+            <br>
+            <div class="d-flex justify-content-end">
+              <div class="avatar-group">
+                <img [src]="entry.foto" alt="" matTooltipPosition="above" [matTooltip]="entry.usuario ?? ''"
+                    class="rounded-circle avatar-xxs" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="i > 0 && entry.projeto">
+            <h3>{{entry.data}}</h3>
+            <p>
+              {{'Previsão de término do projeto!'}}
+            </p> 
+            <br>
+            <div class="d-flex justify-content-end">
+              <div class="avatar-group">
+                <img [src]="entry.foto" alt="" matTooltipPosition="above" [matTooltip]="entry.usuario ?? ''"
+                    class="rounded-circle avatar-xxs" />
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

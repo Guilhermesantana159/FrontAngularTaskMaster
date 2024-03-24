@@ -1,0 +1,45 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Consulta de Projetos" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="card"> 
+  <div class="card-body">
+    <div class="row">
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-dark btn-border m-1" (click)="RecarregarGrid()">
+          <small>
+            <strong>
+            <i class="ri-refresh-line"></i> Atualizar
+            </strong>
+          </small>
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-border m-1" routerLink="registro/novo">
+          <small>
+            <strong>
+            <i class="ri-add-line"></i> Novo
+            </strong>
+          </small>
+        </button>
+      </div>
+  </div>
+    <div class="row px-2">
+      <data-grid [gridOptions]="gridOptions" [modal]="false" (Editar)="Editar($event)" (Concluir)="Concluir($event)" (Encerrar)="Encerrar($event)" (Deletar)="Deletar($event)">
+      </data-grid>  
+    </div>
+  </div> 
+  <div class="card-footer">
+    <div class="row">
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger btn-sm m-1" (click)="GerarRelatorio(2)">
+          <i class="bx bxs-file-pdf"></i>              
+          Exportar em PDF
+        </button>
+        <button type="button" class="btn btn-success btn-sm m-1" (click)="GerarRelatorio(1)">
+          <i class="ri-file-excel-2-line"></i>
+          Exportar em EXCEL
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 
+

@@ -1,0 +1,8 @@
+.header-page-crud-image{
+    height: 35vh;
+    border-radius: 5pt;
+    box-shadow: 0.5px 0.5px 2pt black;
+    background-image: url('../../../../assets/images/BackgrounUser.jpg');
+    background-size: cover;
+    background-position: center;
+}

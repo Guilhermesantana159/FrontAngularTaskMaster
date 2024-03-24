@@ -1,0 +1,108 @@
+<div class="inline-block w-100" >
+  <label class="form-label">{{ParamsConsulta.Label}}
+    <span class="span-required" [hidden]="!ParamsConsulta.Required" matTooltip="Campo obrigatório" matTooltipPosition="right">*</span></label>
+    <div *ngIf="gridOptions.Parametros.MultiModal && !ParamsConsulta.OnlyButton">
+      <div class="form-control" style="display: inline-block; width: 100%;">
+        <mat-chip-grid #chipGrid aria-label="Enter keywords">
+          <mat-chip-row *ngFor="let item of this.form.get(this.multiForm)?.value"
+          (removed)="Remove(item)">
+          {{item.SelectedText}}
+            <button matChipRemove aria-label="'remove ' + keyword">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input placeholder="Selecione ..."
+                [matChipInputFor]="chipGrid"
+                disabled
+                #itensCtrl/>
+        <div class="d-flex justify-content-end">
+          <button 
+            class="btn rounded-pill btn-light waves-effect" 
+            id="addon-wrapping" 
+            (click)="ResetConsultaPadrao()" 
+            [disabled]="ParamsConsulta.Disabled || disabled" 
+            matTooltip="Limpar" matTooltipPosition="above">
+            <i class="ri-close-circle-line"></i>
+          </button>
+          <button 
+            *ngIf="(ParamsConsulta.Disabled || disabled)"
+            disabled
+            class="btn rounded-pill btn-light waves-effect" 
+            matTooltip="Buscar" matTooltipPosition="above">
+            <i class="ri-search-line"></i>
+          </button>
+          <button 
+            *ngIf="!(ParamsConsulta.Disabled || disabled)"   
+            data-bs-toggle="modal" 
+            class="btn rounded-pill btn-light waves-effect" 
+
+            data-bs-target="#consulta-padrao" 
+            matTooltip="Buscar" matTooltipPosition="above">
+            <i class="ri-search-line"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="input-group" *ngIf="!gridOptions.Parametros.MultiModal && !ParamsConsulta.OnlyButton" [formGroup]="form">
+      <input type="text"class="form-control" [formControlName]="selectedText" [value]="ConsultaModal.SelectedText" readonly>
+      <input hidden type="text"class="form-control" [formControlName]="selectedValue" readonly>
+      <button 
+        *ngIf="!gridOptions.Parametros.MultiModal"
+        [class]="!gridOptions.Parametros.MultiModal ? 'input-group-text' : 'btn'" 
+        id="addon-wrapping" 
+        (click)="ResetConsultaPadrao()" 
+        [disabled]="ParamsConsulta.Disabled || disabled" 
+        matTooltip="Limpar" matTooltipPosition="above">
+        <i class="ri-close-circle-line"></i>
+      </button>
+      <button 
+        *ngIf="(ParamsConsulta.Disabled || disabled)"
+        [class]="!gridOptions.Parametros.MultiModal ? 'input-group-text' : 'btn'" 
+        disabled
+        matTooltip="Buscar" matTooltipPosition="above">
+        <i class="ri-search-line"></i>
+      </button>
+      <button 
+        *ngIf="!(ParamsConsulta.Disabled || disabled)"
+        [class]="!gridOptions.Parametros.MultiModal ? 'input-group-text' : 'btn'" 
+        id="addon-wrapping" 
+        data-bs-toggle="modal" 
+        data-bs-target="#consulta-padrao" 
+        matTooltip="Buscar" matTooltipPosition="above">
+        <i class="ri-search-line"></i>
+      </button>
+    </div>
+    <div class="input-group" *ngIf="ParamsConsulta.OnlyButton" [formGroup]="form">
+      <input type="text"class="form-control" [formControlName]="selectedText" [value]="ConsultaModal.SelectedText" readonly hidden>
+      <input hidden type="text"class="form-control" [formControlName]="selectedValue" readonly>
+      <div data-bs-toggle="tooltip" data-bs-trigger="hover" ngbTooltip="Novo contato" placement="bottom">
+        <button 
+          *ngIf="!(ParamsConsulta.Disabled || disabled)"
+          type="button" 
+          class="btn btn-soft-success btn-sm shadow-none"
+          data-bs-toggle="modal" 
+          data-bs-target="#consulta-padrao">
+            <i class="ri-add-line align-bottom"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="consulta-padrao" aria-labelledby="consulta-padrao" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{ParamsConsulta.Title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5" >
+        <data-grid [gridOptions]="gridOptions"></data-grid>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

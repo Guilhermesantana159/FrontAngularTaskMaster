@@ -1,0 +1,115 @@
+.timeline {
+    position: relative;
+    font-family: Helvetica, sans-serif;
+    width: 100%;
+    height: 100%;
+  }
+  
+  
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    background-color: #00ff00;
+    top: 0;
+    bottom: 0;
+  }
+
+  .line {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+  }
+  
+  .line::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    right: -15px;
+    background-color: rgb(255, 255, 255);
+    border: 4px solid #00ff00;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  .left {
+    left: 0;
+  }
+  
+  .right {
+    left: 50%;
+  }
+  
+  .left::before {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    right: 30px;
+    border: medium solid white;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent white;
+  }
+  
+  .right::before {
+    content: "";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    left: 30px;
+    border: medium solid white;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent white transparent transparent;
+  }
+  
+  .right::after {
+    left: -16px;
+  }
+  
+  .content {
+    padding: 20px 30px;
+    background-color: rgba(207, 207, 207, 0.548);
+    position: relative;
+    border-radius: 6px;
+  }
+
+  .with-background::after {
+    background-size: cover;
+    background-position: center;
+  }
+
+  p{
+    font-weight: 500;
+    font-size: medium;
+    font-family: 'Line Awesome Free';
+  }
+
+  @media screen and (max-width: 990px) {
+    .line {
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+    
+    .line::before {
+      left: 60px;
+      border: medium solid white;
+      border-width: 10px 10px 10px 0;
+      border-color: transparent white transparent transparent;
+    }
+  
+    .left::after, .right::after {
+      left: 15px;
+    }
+    
+    .right {
+      left: 0%;
+    }
+  }

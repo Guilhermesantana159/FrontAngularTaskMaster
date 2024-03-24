@@ -1,0 +1,216 @@
+<mat-progress-bar mode="indeterminate" [hidden]="!loading"></mat-progress-bar>
+<div class="row">
+    <div class="col-xxl-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h6 class="card-title mb-3 flex-grow-1 text-start text-uppercase">Tempo utilizado</h6>
+                <div class="mb-2">
+                    <lord-icon src="https://cdn.lordicon.com/kbtmbyzy.json" trigger="loop"
+                        colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px">
+                    </lord-icon>
+                </div>
+                <h3 class="mb-1">{{data == undefined ? '' : (data.tempoUtilizado == undefined ? '00:00:00' : data.tempoUtilizado)}}</h3>
+                <h5 class="fs-14 mb-4">{{data == undefined ? '' : data.titulo}}</h5>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="table-card">
+                    <table class="table mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="fw-medium">Cód tarefa</td>
+                                <td>{{data == undefined ? '' : '#' + data.codTarefa}}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium">Projeto</td>
+                                <td>{{data == undefined ? '' : data.nomeProjeto}}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium">Atividade</td>
+                                <td>{{data == undefined ? '' : data.nomeAtividade}}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium">
+                                    Prioridade
+                                </td>
+                                <td>
+                                    <span *ngIf="data != undefined" class="badge bg-warning text-uppercase" [ngClass]=" { 'bg-danger': data.prioridade === 'Alta', 'bg-success': data.prioridade === 'NãoInformada', 'bg-warning': data.prioridade === 'Media', 'bg-info': data.prioridade === 'Baixa'}">
+                                        {{data.prioridade}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr *ngIf="!data?.isView ?? false">
+                                <td class="fw-medium">Status</td>
+                                <td>
+                                    <span class="badge text-uppercase" *ngIf="data != undefined"
+                                        [ngClass]=" { 'badge-soft-secondary': data.status === 'Progresso', 'badge-soft-info': data.status === 'Aguardando', 'badge-soft-success': data.status === 'Completo', 'badge-soft-warning': data.status === 'Atrasado' }">
+                                        {{data.status}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium">Data Fim</td>
+                                <td>{{data == undefined ? '' : data.dataFim}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="data != undefined">
+            <div class="card mb-3" *ngIf="data.responsavelTarefa != undefined">
+                <div class="card-body">
+                    <div class="d-flex mb-3">
+                        <h6 class="card-title mb-0 flex-grow-1">Responsável</h6>
+                    </div>
+                    <ul class="list-unstyled vstack gap-3 mb-0">
+                        <li *ngFor="let resp of data.responsavelTarefa">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <img [src]="resp.foto" alt="" class="avatar-xs rounded-circle">
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <h6 class="mb-1 fs-15">
+                                        <a>
+                                            {{resp.nome}}
+                                        </a>
+                                    </h6>
+                                    <p class="text-muted mb-0">
+                                        #{{resp.idUsuario}}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-9">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-muted" *ngIf="data != undefined">
+                    <h6 class="mb-3 fw-semibold text-uppercase">Descricao</h6>
+                    <p>{{data.descricaoTarefa == undefined ? 'Nenhuma descrição foi adicionado a esta tarefa...' : data.descricaoTarefa}}</p>
+                    <div class="pt-3 border-top border-top-dashed mt-4" *ngIf="data.lTags != undefined">
+                        <h6 class="mb-3 fw-semibold text-uppercase" *ngIf="data.lTags.length > 0">Tags</h6>
+                        <div class="hstack flex-wrap gap-2 fs-15" *ngIf="data.lTags.length > 0">
+                            <div class="badge fw-medium badge-soft-info" *ngFor="let tag of data.lTags">
+                                {{tag}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="data != undefined">
+            <div class="card-header">
+                <div>
+                    <ul ngbNav #customNav="ngbNav" [activeId]="1"
+                        class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                        <li [ngbNavItem]="1" class="nav-item">
+                            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                                Comentários {{data.lComentarios == undefined ? '': (data.lComentarios.length == 0 ? '': '(' + data.lComentarios.length + ')')}}
+                            </a>
+                            <ng-template ngbNavContent>
+                                <h5 class="card-title mb-4">Comentários</h5>
+                                <div class="d-flex mb-4" *ngIf="data.lComentarios.length == 0">
+                                    <div class="flex-shrink-0">
+                                        Nenhuma comentário foi adicionado a esta tarefa...
+                                    </div>
+                                </div>
+                                <ngx-simplebar style="height: 508px;" class="px-3 mx-n3 mb-2" *ngIf="data.lComentarios != undefined">
+                                    <div class="d-flex mb-4" *ngFor="let coment of data.lComentarios">
+                                        <div class="flex-shrink-0">
+                                            <img [src]="coment.foto" alt=""
+                                                class="avatar-xs rounded-circle" />
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h5 class="fs-15">
+                                                <a class="mr-2">{{coment.nomeUsuario}}</a> 
+                                                <small class="text-muted">{{coment.horario}}</small></h5>
+                                            <p class="text-muted">{{coment.comentario}}</p>
+                                        </div>
+                                    </div>
+                                </ngx-simplebar>
+                                <form class="mt-4" [formGroup]="comentarioFormGroup">
+                                    <div class="row g-3">
+                                        <div class="col-lg-12">
+                                            <label for="exampleFormControlTextarea1" class="form-label">
+                                                Comentar
+                                            </label>
+                                            <textarea class="form-control bg-light border-light"
+                                                id="exampleFormControlTextarea1" rows="3" formControlName="descricao"
+                                                placeholder="Insira algum comentário"></textarea>
+                                        </div>
+                                        <div class="col-12 text-end">
+                                            <button type="button"
+                                                class="btn btn-ghost-secondary btn-icon waves-effect me-1">
+                                            </button>
+                                            <button href="javascript:void(0);" class="btn btn-success" 
+                                            [disabled]="comentarioFormGroup.get('descricao')?.value == undefined 
+                                            || comentarioFormGroup.get('descricao')?.value == '' || data.isView" (click)="Enviar(comentarioFormGroup)">Enviar comentário</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3" class="nav-item">
+                            <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">
+                                Atualizações
+                            </a>
+                            <ng-template ngbNavContent>
+                                <h6 class="card-title mb-4 pb-2">Movimentações</h6>
+                                <div class="table-responsive table-card">
+                                    <table class="table align-middle mb-0">
+                                        <thead class="table-light text-muted">
+                                            <tr>
+                                                <th scope="col">Membro</th>
+                                                <th scope="col">Data da movimentação</th>
+                                                <th scope="col">Tempo na coluna</th>
+                                                <th scope="col">De</th>
+                                                <th scope="col">Para</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngIf="data.lMovimentacoes != undefined">
+                                            <tr *ngFor="let mov of data.lMovimentacoes">
+                                                <th scope="row">
+                                                    <div class="d-flex align-items-center">
+                                                        <img [src]="mov.foto" alt=""
+                                                            class="rounded-circle avatar-xxs">
+                                                        <div class="flex-grow-1 ms-2">
+                                                            <a class="fw-medium">
+                                                                {{mov.nomeUsuario}}
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                                <td>{{mov.dataMovimentacao}}</td>
+                                                <td>{{mov.tempoColuna}}</td>
+                                                <td>
+                                                    <span class="badge text-uppercase" [ngClass]="{ 'badge-soft-secondary': mov.de === 'Progresso', 'badge-soft-info': mov.de === 'Aguardando', 'badge-soft-success': mov.de === 'Completo', 'badge-soft-danger': mov.de === 'Atrasado'}">{{mov.de}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge text-uppercase" [ngClass]="{ 'badge-soft-secondary': mov.para === 'Progresso', 'badge-soft-info': mov.para === 'Aguardando', 'badge-soft-success': mov.para === 'Completo', 'badge-soft-danger': mov.para === 'Atrasado'}">{{mov.para}}</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center p-3 text-muted" *ngIf="data.lMovimentacoes == undefined || data.lMovimentacoes.length == 0">
+                                        Esta tarefa não possui movimentações
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div [ngbNavOutlet]="customNav"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
